@@ -803,7 +803,6 @@ TNodeStats *stats_getNodeStat(int index)
   return &NodeStats[index];
 }
 
-
 TStorageStats *stats_getStorageStat(int index)
 //
 // Input:    subindex
@@ -815,7 +814,6 @@ TStorageStats *stats_getStorageStat(int index)
   int k = Node[index].subIndex;
   return &StorageStats[k];
 }
-
 
 TOutfallStats *stats_getOutfallStat(int index)
 //
@@ -829,36 +827,6 @@ TOutfallStats *stats_getOutfallStat(int index)
   return &OutfallStats[k];
 }
 
-// int stats_getLinkStat(int index, TLinkStats *linkStats)
-// {
-// 	int errorcode = 0;
-//
-// 	// Check if Open
-// 	if (swmm_IsOpenFlag() == FALSE)
-// 	{
-// 		errorcode = ERR_API_INPUTNOTOPEN;
-// 	}
-//
-// 	// Check if Simulation is Running
-// 	else if (swmm_IsStartedFlag() == FALSE)
-// 	{
-// 		errorcode = ERR_API_SIM_NRUNNING;
-// 	}
-//
-// 	// Check if object index is within bounds
-// 	else if (index < 0 || index >= Nobjects[LINK])
-// 	{
-// 		errorcode = ERR_API_OBJECT_INDEX;
-// 	}
-//
-// 	else
-// 	{
-// 		// Copy Structure
-// 		memcpy(linkStats, &LinkStats[index], sizeof(TLinkStats));
-// 	}
-// 	return errorcode;
-// }
-
 TLinkStats *stats_getLinkStat(int index)
 // Input:    index
 // Return:   pointer to LinkStats struct
@@ -867,45 +835,6 @@ TLinkStats *stats_getLinkStat(int index)
 {
     return &LinkStats[index];
 }
-
-// int stats_getPumpStat(int index, TPumpStats *pumpStats)
-//
-// {
-// 	int errorcode = 0;
-//
-// 	// Check if Open
-// 	if (swmm_IsOpenFlag() == FALSE)
-// 	{
-// 		errorcode = ERR_API_INPUTNOTOPEN;
-// 	}
-//
-// 	// Check if Simulation is Running
-// 	else if (swmm_IsStartedFlag() == FALSE)
-// 	{
-// 		errorcode = ERR_API_SIM_NRUNNING;
-// 	}
-//
-// 	// Check if object index is within bounds
-// 	else if (index < 0 || index >= Nobjects[LINK])
-// 	{
-// 		errorcode = ERR_API_OBJECT_INDEX;
-// 	}
-//
-// 	// Check if pump
-// 	else if (Link[index].type != PUMP)
-// 	{
-// 		errorcode = ERR_API_WRONG_TYPE;
-// 	}
-//
-// 	else
-// 	{
-// 		// fetch sub index
-// 		int k = Link[index].subIndex;
-// 		// Copy Structure
-// 		memcpy(pumpStats, &PumpStats[k], sizeof(TPumpStats));
-// 	}
-// 	return errorcode;
-// }
 
 TPumpStats *stats_getPumpStat(int index)
 //

@@ -58,7 +58,7 @@ struct FixtureBeforeEnd{
 BOOST_AUTO_TEST_SUITE(test_toolkitapi_fixture)
 
 BOOST_FIXTURE_TEST_CASE(test_getOutfallStats, FixtureBeforeEnd) {
-//	int error;
+
 	int outfall_index;
 
 	char outfall_id[] = "18";
@@ -78,11 +78,11 @@ BOOST_FIXTURE_TEST_CASE(test_getOutfallStats, FixtureBeforeEnd) {
 	BOOST_CHECK_SMALL(outfall_stats->totalLoad[0] - 409.7508625, 0.1);
 	BOOST_CHECK_SMALL(outfall_stats->totalLoad[1] - 0.0819502, 0.1);
 
-	freeArray((void **)&outfall_stats);
+	swmm_free((void **)&outfall_stats);
 }
 
 BOOST_FIXTURE_TEST_CASE(test_getSubcatchStats, FixtureBeforeEnd){
-//    int error;
+
     int subc_ind;
 
     char subid[] = "1";
@@ -103,7 +103,7 @@ BOOST_FIXTURE_TEST_CASE(test_getSubcatchStats, FixtureBeforeEnd){
     BOOST_CHECK_SMALL(subc_stats->precip - 2.65, 0.0001);
     BOOST_CHECK_SMALL(subc_stats->evap - 0.0, 0.0001);
 
-    freeArray((void **)&subc_stats);
+    swmm_free((void **)&subc_stats);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

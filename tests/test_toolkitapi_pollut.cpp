@@ -72,8 +72,8 @@ BOOST_FIXTURE_TEST_CASE(get_pollut_values, FixtureBeforeStep){
     }while (elapsedTime != 0 && !error);
     BOOST_REQUIRE(error == ERR_NONE);
 
-    freeArray((void**) &buildup_array);
-    freeArray((void**) &ponded_array);
+    swmm_free((void**) &buildup_array);
+    swmm_free((void**) &ponded_array);
 
     swmm_end();
 }

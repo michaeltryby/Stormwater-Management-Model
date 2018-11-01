@@ -1091,23 +1091,21 @@ int DLLEXPORT swmm_getNodeStats(int index, SM_NodeStats **nodeStats)
   	int errorcode = 0;
     TNodeStats *tmp = NULL;
 
-  	// Check if Open
   	if (swmm_IsOpenFlag() == FALSE)
   	{
   		errorcode = ERR_API_INPUTNOTOPEN;
   	}
 
-  	// Check if Simulation is Running
   	else if (swmm_IsStartedFlag() == FALSE)
   	{
   		errorcode = ERR_API_SIM_NRUNNING;
   	}
 
-  	// Check if object index is within bounds
   	else if (index < 0 || index >= Nobjects[NODE])
   	{
   		errorcode = ERR_API_OBJECT_INDEX;
   	}
+
     else if (MEMCHECK(tmp = (TNodeStats *)calloc(1, sizeof(TNodeStats))))
       errorcode = ERR_MEMORY;
 
@@ -1169,25 +1167,21 @@ int DLLEXPORT swmm_getStorageStats(int index, SM_StorageStats **storageStats)
   	int errorcode = 0;
     TStorageStats *tmp = NULL;
 
-  	// Check if Open
   	if (swmm_IsOpenFlag() == FALSE)
   	{
   		errorcode = ERR_API_INPUTNOTOPEN;
   	}
 
-  	// Check if Simulation is Running
   	else if (swmm_IsStartedFlag() == FALSE)
   	{
   		errorcode = ERR_API_SIM_NRUNNING;
   	}
 
-  	// Check if object index is within bounds
   	else if (index < 0 || index >= Nobjects[NODE])
   	{
   		errorcode = ERR_API_OBJECT_INDEX;
   	}
 
-  	// Check Node Type is storage
   	else if (Node[index].type != STORAGE)
   	{
   		errorcode = ERR_API_WRONG_TYPE;
@@ -1292,85 +1286,130 @@ int DLLEXPORT swmm_getOutfallStats(int index, SM_OutfallStats **outfallStats)
     return (errorcode);
 }
 
-//void DLLEXPORT swmm_freeOutfallStats(SM_OutfallStats *outfallStats)
-/////
-///// Return:  API Error
-///// Purpose: Frees Outfall Node Stats and Converts Units
-///// Note:    API user is responsible for calling swmm_freeOutfallStats
-/////          since this function performs a memory allocation.
-//{
-//    FREE(outfallStats->totalLoad);
-//}
+
+int DLLEXPORT swmm_getLinkStats(int index, SM_LinkStats **linkStats)
+///
+/// Output:  Link Stats Structure (SM_LinkStats)
+/// Return:  API Error
+/// Purpose: Gets Link Stats and Converts Units
+{
+ 	int errorcode = 0;
+	TLinkStats *tmp = NULL;
+
+ 	if (swmm_IsOpenFlag() == FALSE)
+ 	{
+ 		errorcode = ERR_API_INPUTNOTOPEN;
+ 	}
+
+ 	else if (swmm_IsStartedFlag() == FALSE)
+ 	{
+ 		errorcode = ERR_API_SIM_NRUNNING;
+ 	}
+
+ 	else if (index < 0 || index >= Nobjects[LINK])
+ 	{
+ 		errorcode = ERR_API_OBJECT_INDEX;
+ 	}
+	
+	else if (MEMCHECK(tmp = (TLinkStats *)calloc(1, sizeof(TLinkStats))))
+		errorcode = ERR_MEMORY;
+
+ 	else
+ 	{
+ 		// Copy Structure
+ 		memcpy(tmp, stats_getLinkStat(index), sizeof(TLinkStats));
+		*linkStats = (TLinkStats *)tmp;
+
+		// Cumulative Maximum Flowrate
+        (*linkStats)->maxFlow *= UCF(FLOW);
+        // Cumulative Maximum Velocity
+        (*linkStats)->maxVeloc *= UCF(LENGTH);
+        // Cumulative Maximum Depth
+        (*linkStats)->maxDepth *= UCF(LENGTH);
+        // Cumulative Time Normal Flow
+        (*linkStats)->timeNormalFlow /= 3600.0;
+        // Cumulative Time Inlet Control
+        (*linkStats)->timeInletControl /= 3600.0;
+        // Cumulative Time Surcharged
+        (*linkStats)->timeSurcharged /= 3600.0;
+        // Cumulative Time Upstream Full
+        (*linkStats)->timeFullUpstream /= 3600.0;
+        // Cumulative Time Downstream Full
+        (*linkStats)->timeFullDnstream /= 3600.0;
+        // Cumulative Time Full Flow
+        (*linkStats)->timeFullFlow /= 3600.0;
+        // Cumulative Time Capacity limited
+        (*linkStats)->timeCapacityLimited /= 3600.0;
+        // Cumulative Time Courant Critical Flow
+        (*linkStats)->timeCourantCritical /= 3600.0;
+    }
+
+    return (errorcode);
+}
 
 
+int DLLEXPORT swmm_getPumpStats(int index, SM_PumpStats **pumpStats)
+///
+/// Output:  Pump Link Stats Structure (SM_PumpStats)
+/// Return:  API Error
+/// Purpose: Gets Pump Link Stats and Converts Units
+/// Note: This function allocates memory. Use swmm_free() to deallocate it. 
+{
+ 	int errorcode = 0;
+	TPumpStats *tmp = NULL;
 
-//int DLLEXPORT swmm_getLinkStats(int index, SM_LinkStats **linkStats)
-/////
-///// Output:  Link Stats Structure (SM_LinkStats)
-///// Return:  API Error
-///// Purpose: Gets Link Stats and Converts Units
-//{
-//    int errorcode = stats_getLinkStat(index, linkStats);
-//
-//    if (errorcode == 0)
-//    {
-//        // Cumulative Maximum Flowrate
-//        linkStats->maxFlow *= UCF(FLOW);
-//        // Cumulative Maximum Velocity
-//        linkStats->maxVeloc *= UCF(LENGTH);
-//        // Cumulative Maximum Depth
-//        linkStats->maxDepth *= UCF(LENGTH);
-//        // Cumulative Time Normal Flow
-//        linkStats->timeNormalFlow /= 3600.0;
-//        // Cumulative Time Inlet Control
-//        linkStats->timeInletControl /= 3600.0;
-//        // Cumulative Time Surcharged
-//        linkStats->timeSurcharged /= 3600.0;
-//        // Cumulative Time Upstream Full
-//        linkStats->timeFullUpstream /= 3600.0;
-//        // Cumulative Time Downstream Full
-//        linkStats->timeFullDnstream /= 3600.0;
-//        // Cumulative Time Full Flow
-//        linkStats->timeFullFlow /= 3600.0;
-//        // Cumulative Time Capacity limited
-//        linkStats->timeCapacityLimited /= 3600.0;
-//        // Cumulative Time Courant Critical Flow
-//        linkStats->timeCourantCritical /= 3600.0;
-//    }
-//
-//    return (errorcode);
-//}
-//
-//
-//int DLLEXPORT swmm_getPumpStats(int index, SM_PumpStats **pumpStats)
-/////
-///// Output:  Pump Link Stats Structure (SM_PumpStats)
-///// Return:  API Error
-///// Purpose: Gets Pump Link Stats and Converts Units
-//{
-//    int errorcode = stats_getPumpStat(index, pumpStats);
-//
-//    if (errorcode == 0)
-//    {
-//        // Cumulative Minimum Flow
-//        pumpStats->minFlow *= UCF(FLOW);
-//        // Cumulative Average Flow
-//        if (pumpStats->totalPeriods > 0)
-//        {
-//            pumpStats->avgFlow *= (UCF(FLOW) / (double)pumpStats->totalPeriods);
-//        }
-//        else
-//        {
-//            pumpStats->avgFlow *= 0.0;
-//        }
-//        // Cumulative Maximum Flow
-//        pumpStats->maxFlow *= UCF(FLOW);
-//        // Cumulative Pumping Volume
-//        pumpStats->volume *= UCF(VOLUME);
-//    }
-//
-//    return (errorcode);
-//}
+ 	// Check if Open
+ 	if (swmm_IsOpenFlag() == FALSE)
+ 	{
+ 		errorcode = ERR_API_INPUTNOTOPEN;
+ 	}
+
+ 	// Check if Simulation is Running
+ 	else if (swmm_IsStartedFlag() == FALSE)
+ 	{
+ 		errorcode = ERR_API_SIM_NRUNNING;
+ 	}
+
+ 	// Check if object index is within bounds
+ 	else if (index < 0 || index >= Nobjects[LINK])
+ 	{
+ 		errorcode = ERR_API_OBJECT_INDEX;
+ 	}
+
+ 	// Check if pump
+ 	else if (Link[index].type != PUMP)
+ 	{
+ 		errorcode = ERR_API_WRONG_TYPE;
+ 	}
+	
+	else if (MEMCHECK(tmp = (TPumpStats *)calloc(1, sizeof(TPumpStats))))
+		errorcode = ERR_MEMORY;
+
+ 	else
+ 	{
+ 		// Copy Structure
+ 		memcpy(tmp, stats_getPumpStat(index), sizeof(TPumpStats));
+		*pumpStats = (SM_PumpStats *)tmp;
+
+        // Cumulative Minimum Flow
+        (*pumpStats)->minFlow *= UCF(FLOW);
+        // Cumulative Average Flow
+        if ((*pumpStats)->totalPeriods > 0)
+        {
+            (*pumpStats)->avgFlow *= (UCF(FLOW) / (double)(*pumpStats)->totalPeriods);
+        }
+        else
+        {
+            (*pumpStats)->avgFlow *= 0.0;
+        }
+        // Cumulative Maximum Flow
+        (*pumpStats)->maxFlow *= UCF(FLOW);
+        // Cumulative Pumping Volume
+        (*pumpStats)->volume *= UCF(VOLUME);
+    }
+
+    return (errorcode);
+}
 
 
 int DLLEXPORT swmm_getSubcatchStats(int index, SM_SubcatchStats **subcatchStats)
@@ -1378,6 +1417,7 @@ int DLLEXPORT swmm_getSubcatchStats(int index, SM_SubcatchStats **subcatchStats)
 /// Output:  Subcatchment Stats Structure (SM_SubcatchStats)
 /// Return:  API Error
 /// Purpose: Gets Subcatchment Stats and Converts Units
+/// Note: This function allocates memory. Use swmm_free() to deallocate it. 
 {
   int errorcode = 0;
   TSubcatchStats *tmp = NULL;
@@ -1697,12 +1737,12 @@ double* newDoubleArray(int n)
 }
 
 
-void DLLEXPORT freeArray(void** array)
+void DLLEXPORT swmm_free(void** array)
 ///
 /// Helper function used to free array allocated memory by API.
 ///
 {
-    if (array != NULL) {
+    if (*array != NULL) {
         FREE(*array);
         *array = NULL;
     }

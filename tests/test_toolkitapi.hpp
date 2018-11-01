@@ -75,9 +75,11 @@ struct FixtureBeforeStart{
         {
             error = swmm_step(&elapsedTime);
         }while (elapsedTime != 0 && !error);
-        if (!error) swmm_end();
-        if (!error) swmm_report();
-
+		
+		if (!error) {
+			swmm_end();
+			swmm_report();
+		}
         swmm_close();
     }
 };

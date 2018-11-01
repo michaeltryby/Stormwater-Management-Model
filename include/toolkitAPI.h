@@ -789,14 +789,6 @@ int DLLEXPORT swmm_getStorageStats(int index, SM_StorageStats **storageStats);
 int DLLEXPORT swmm_getOutfallStats(int index, SM_OutfallStats **outfallStats);
 
 /**
- @brief Free outfall statistics structure.
- @param[out] outfallStats The outfall Stats struct. This frees any allocated
- pollutants array.
- @return Error code
-*/
-void DLLEXPORT swmm_freeOutfallStats(SM_OutfallStats *outfallStats);
-
-/**
  @brief Get link statistics.
  @param index The index of a link
  @param[out] linkStats The link Stats struct (see @ref SM_LinkStats).
@@ -877,11 +869,11 @@ int DLLEXPORT swmm_setOutfallStage(int index, double stage);
 int DLLEXPORT swmm_setGagePrecip(int index, double total_precip);
 
 /**
- @brief Helper function to free memory array allocated in SWMM.
+ @brief Helper function to free memory allocated by SWMM.
  @param array The pointer to the array
  @return Void.
 */
-void DLLEXPORT freeArray(void** array);
+void DLLEXPORT swmm_free(void** array);
 
 #ifdef __cplusplus
 }    // matches the linkage specification from above */
