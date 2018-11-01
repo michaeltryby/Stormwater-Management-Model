@@ -76,6 +76,8 @@ BOOST_FIXTURE_TEST_CASE(test_getLinkStats, FixtureBeforeEnd) {
 	BOOST_CHECK_SMALL(link_stats->maxVeloc - 6.8433743, 0.001);
 	BOOST_CHECK_SMALL(link_stats->maxDepth - 0.7871311, 0.001);
 
+	swmm_free((void **)&link_stats);
+
 }
 
 BOOST_FIXTURE_TEST_CASE(test_getOutfallStats, FixtureBeforeEnd) {
