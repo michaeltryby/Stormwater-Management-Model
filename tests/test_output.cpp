@@ -64,7 +64,7 @@ boost::test_tools::predicate_result check_cdd(std::vector<float>& test,
     return floor(min_cdd) <= cdd_tol;
 }
 
-boost::test_tools::predicate_result check_string(std::string test, std::string ref)
+boost::test_tools::predicate_result check_string(const std::string &test, const std::string &ref)
 {
     if (ref.compare(test) == 0)
         return true;

@@ -405,7 +405,7 @@ typedef struct
  * @var SM_SubcatchStats::maxFlow
  *   maximum runoff rate (flowrate)
  */
-typedef struct s_subcatch_stats
+typedef struct
 {
     double       precip;
     double       runon;

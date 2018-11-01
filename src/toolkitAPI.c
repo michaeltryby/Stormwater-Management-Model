@@ -1318,7 +1318,7 @@ int DLLEXPORT swmm_getLinkStats(int index, SM_LinkStats **linkStats)
  	{
  		// Copy Structure
  		memcpy(tmp, stats_getLinkStat(index), sizeof(TLinkStats));
-		*linkStats = (TLinkStats *)tmp;
+		*linkStats = (SM_LinkStats *)tmp;
 
 		// Cumulative Maximum Flowrate
         (*linkStats)->maxFlow *= UCF(FLOW);

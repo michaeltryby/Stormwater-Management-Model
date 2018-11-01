@@ -57,6 +57,27 @@ struct FixtureBeforeEnd{
 
 BOOST_AUTO_TEST_SUITE(test_toolkitapi_fixture)
 
+BOOST_FIXTURE_TEST_CASE(test_getLinkStats, FixtureBeforeEnd) {
+
+	int link_index;
+
+	char link_id[] = "8";
+
+	SM_LinkStats *link_stats = NULL;
+
+	error = swmm_getObjectIndex(SM_LINK, link_id, &link_index);
+	BOOST_REQUIRE(error == 0);
+
+	error = swmm_getLinkStats(link_index, &link_stats);
+	BOOST_REQUIRE(error == 0);
+
+	BOOST_CHECK_SMALL(link_stats->maxFlow - 7.8485901, 0.001);
+	BOOST_CHECK_SMALL(link_stats->maxFlowDate - 35796.1673611, 0.001);
+	BOOST_CHECK_SMALL(link_stats->maxVeloc - 6.8433743, 0.001);
+	BOOST_CHECK_SMALL(link_stats->maxDepth - 0.7871311, 0.001);
+
+}
+
 BOOST_FIXTURE_TEST_CASE(test_getOutfallStats, FixtureBeforeEnd) {
 
 	int outfall_index;
