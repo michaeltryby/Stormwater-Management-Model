@@ -979,12 +979,14 @@ typedef struct
 //-------------------
 // OUTFALL STATISTICS
 //-------------------
+ // Support for FAMs in C++ is non-standard MS extension  
+#pragma warning(disable : 4200)
 typedef struct
 {
    double       avgFlow;
    double       maxFlow;
-   double*      totalLoad;   
    int          totalPeriods;
+   double       totalLoad[];   // Flexible Array Member
 }  TOutfallStats;
 
 //---------------- 

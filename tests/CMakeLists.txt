@@ -7,7 +7,7 @@
 #
 # Modified by: Michael E. Tryby
 #              US EPA ORD/NRMRL
-# 
+#
 
 cmake_minimum_required (VERSION 3.0)
 
@@ -16,7 +16,7 @@ cmake_minimum_required (VERSION 3.0)
 enable_testing()
 
 
-# Sets for output directory for executables and libraries. 
+# Sets for output directory for executables and libraries.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
@@ -45,9 +45,9 @@ foreach(testSrc ${TEST_SRCS})
         #link to Boost libraries AND your targets and dependencies
         target_link_libraries(${testName} ${Boost_LIBRARIES} swmm5 swmm-output)
 
-        #Finally add it to test execution - 
+        #Finally add it to test execution -
         #Notice the WORKING_DIRECTORY and COMMAND
         add_test(NAME ${testName}
-                 COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${testName}  
+                 COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${testName}
                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data)
 endforeach(testSrc)

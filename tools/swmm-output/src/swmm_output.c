@@ -144,10 +144,10 @@ int DLLEXPORT SMO_close(SMO_Handle* p_handle)
         clearElementNames(p_data);
 
         dst_errormanager(p_data->error_handle);
-        
+
         if (p_data->file != NULL)
             fclose(p_data->file);
-        
+
         free(p_data);
 
         *p_handle = NULL;
@@ -261,12 +261,13 @@ int DLLEXPORT SMO_getProjectSize(SMO_Handle p_handle, int** elementCount, int* l
 //
 {
     int errorcode = 0;
-    int* temp = newIntArray(NELEMENTTYPES);
+    int* temp = NULL;
     data_t* p_data;
 
     p_data = (data_t*)p_handle;
 
     if (p_data == NULL) errorcode = -1;
+    else if (MEMCHECK(temp = newIntArray(NELEMENTTYPES))) errorcode = 414;
     else
     {
         temp[0] = p_data->Nsubcatch;

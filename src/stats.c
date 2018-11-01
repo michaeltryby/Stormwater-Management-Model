@@ -227,8 +227,9 @@ int  stats_open()
     // --- allocate memory for & initialize outfall statistics
     if ( Nnodes[OUTFALL] > 0 )
     {
-        OutfallStats = (TOutfallStats *) calloc(Nnodes[OUTFALL],
-                           sizeof(TOutfallStats));
+		// OutfallStats contains a flexible array member to hold pollutants 
+        OutfallStats = (TOutfallStats *) malloc(Nnodes[OUTFALL] * 
+			sizeof(TOutfallStats) + Nobjects[POLLUT] * sizeof(double));
         if ( !OutfallStats )
         {
             report_writeErrorMsg(ERR_MEMORY, "");
@@ -241,17 +242,17 @@ int  stats_open()
             OutfallStats[j].totalPeriods = 0;
             if ( Nobjects[POLLUT] > 0 )
             {
-                OutfallStats[j].totalLoad =
-                    (double *) calloc(Nobjects[POLLUT], sizeof(double));
-                if ( !OutfallStats[j].totalLoad )
-                {
-                    report_writeErrorMsg(ERR_MEMORY, "");
-                    return ErrorCode;
-                }
+//                OutfallStats[j].totalLoad =
+//                    (double *) calloc(Nobjects[POLLUT], sizeof(double));
+//                if ( !OutfallStats[j].totalLoad )
+//                {
+//                    report_writeErrorMsg(ERR_MEMORY, "");
+//                    return ErrorCode;
+//                }
                 for (k=0; k<Nobjects[POLLUT]; k++)
                     OutfallStats[j].totalLoad[k] = 0.0;
             }
-            else OutfallStats[j].totalLoad = NULL;
+//            else OutfallStats[j].totalLoad = NULL;
         }
     }
 
@@ -304,12 +305,12 @@ void  stats_close()
     FREE(NodeStats);
     FREE(LinkStats);
     FREE(StorageStats);
-    if ( OutfallStats )
-    {
-        for ( j=0; j<Nnodes[OUTFALL]; j++ )
-            FREE(OutfallStats[j].totalLoad);
-        FREE(OutfallStats);
-    }
+//    if ( OutfallStats )
+//    {
+//        for ( j=0; j<Nnodes[OUTFALL]; j++ )
+//            FREE(OutfallStats[j].totalLoad);
+    FREE(OutfallStats);
+//    }
     FREE(PumpStats);
 }
 
@@ -789,233 +790,138 @@ void  stats_updateMaxStats(TMaxStats maxStats[], int i, int j, double x)
         }
     }
 }
-//
-int stats_getNodeStat(int index, TNodeStats *nodeStats)
+
+
+TNodeStats *stats_getNodeStat(int index)
 //
 // Input:    index
-//           element = element to return
-// Return:   value
+// Return:   pointer to NodeStats struct
 // Purpose:  Gets a Node Stat for toolkitAPI
 //
+
 {
-	int errorcode = 0;
-
-	// Check if Open
-	if (swmm_IsOpenFlag() == FALSE)
-	{
-		errorcode = ERR_API_INPUTNOTOPEN;
-	}
-
-	// Check if Simulation is Running
-	else if (swmm_IsStartedFlag() == FALSE)
-	{
-		errorcode = ERR_API_SIM_NRUNNING;
-	}
-
-	// Check if object index is within bounds
-	else if (index < 0 || index >= Nobjects[NODE])
-	{
-		errorcode = ERR_API_OBJECT_INDEX;
-	}
-
-	else
-	{
-		memcpy(nodeStats, &NodeStats[index], sizeof(TNodeStats));
-	}
-	return errorcode;
+  return &NodeStats[index];
 }
 
-int stats_getStorageStat(int index, TStorageStats *storageStats)
+
+TStorageStats *stats_getStorageStat(int index)
 //
 // Input:    subindex
-//           element = element to return
-// Return:   value
+// Return:   pointer to StorageStats struct
 // Purpose:  Gets a Storage Stat for toolkitAPI
 //
 {
-	int errorcode = 0;
-
-	// Check if Open
-	if (swmm_IsOpenFlag() == FALSE)
-	{
-		errorcode = ERR_API_INPUTNOTOPEN;
-	}
-
-	// Check if Simulation is Running
-	else if (swmm_IsStartedFlag() == FALSE)
-	{
-		errorcode = ERR_API_SIM_NRUNNING;
-	}
-
-	// Check if object index is within bounds
-	else if (index < 0 || index >= Nobjects[NODE])
-	{
-		errorcode = ERR_API_OBJECT_INDEX;
-	}
-
-	// Check Node Type is storage
-	else if (Node[index].type != STORAGE)
-	{
-		errorcode = ERR_API_WRONG_TYPE;
-	}
-
-	else
-	{
-		// fetch sub index
-		int k = Node[index].subIndex;
-		// Copy Structure
-		memcpy(storageStats, &StorageStats[k], sizeof(TStorageStats));
-	}
-	return errorcode;
+  // fetch sub index
+  int k = Node[index].subIndex;
+  return &StorageStats[k];
 }
 
-int stats_getOutfallStat(int index, TOutfallStats *outfallStats)
+
+TOutfallStats *stats_getOutfallStat(int index)
 //
 // Input:    subindex
 //           element = element to return
-// Return:   value
+// Return:   pointer to OutfallStats struct
 // Purpose:  Gets a Outfall Stat for toolkitAPI
 //
 {
-	int errorcode = 0;
-    int p;
-
-	// Check if Open
-	if (swmm_IsOpenFlag() == FALSE)
-	{
-		errorcode = ERR_API_INPUTNOTOPEN;
-	}
-
-	// Check if Simulation is Running
-	else if (swmm_IsStartedFlag() == FALSE)
-	{
-		errorcode = ERR_API_SIM_NRUNNING;
-	}
-
-	// Check if object index is within bounds
-	else if (index < 0 || index >= Nobjects[NODE])
-	{
-		errorcode = ERR_API_OBJECT_INDEX;
-	}
-
-	// Check Node Type is outfall
-	else if (Node[index].type != OUTFALL)
-	{
-		errorcode = ERR_API_WRONG_TYPE;
-	}
-
-	else
-	{
-		// fetch sub index
-		int k = Node[index].subIndex;
-		// Copy Structure
-		memcpy(outfallStats, &OutfallStats[k], sizeof(TOutfallStats));
-
-		// Perform Deep Copy of Pollutants Results
-        if (Nobjects[POLLUT] > 0)
-        {
-            outfallStats->totalLoad =
-                (double *)calloc(Nobjects[POLLUT], sizeof(double));
-            if (!outfallStats->totalLoad)
-            {
-                errorcode = ERR_MEMORY;
-            }
-            if (errorcode == 0)
-            {
-                for (p = 0; p < Nobjects[POLLUT]; p++)
-                    outfallStats->totalLoad[p] = OutfallStats[k].totalLoad[p];
-            }
-        }
-        else outfallStats->totalLoad = NULL;
-    }
-    return errorcode;
+  int k = Node[index].subIndex;
+  return &OutfallStats[k];
 }
 
-int stats_getLinkStat(int index, TLinkStats *linkStats)
+// int stats_getLinkStat(int index, TLinkStats *linkStats)
+// {
+// 	int errorcode = 0;
 //
+// 	// Check if Open
+// 	if (swmm_IsOpenFlag() == FALSE)
+// 	{
+// 		errorcode = ERR_API_INPUTNOTOPEN;
+// 	}
+//
+// 	// Check if Simulation is Running
+// 	else if (swmm_IsStartedFlag() == FALSE)
+// 	{
+// 		errorcode = ERR_API_SIM_NRUNNING;
+// 	}
+//
+// 	// Check if object index is within bounds
+// 	else if (index < 0 || index >= Nobjects[LINK])
+// 	{
+// 		errorcode = ERR_API_OBJECT_INDEX;
+// 	}
+//
+// 	else
+// 	{
+// 		// Copy Structure
+// 		memcpy(linkStats, &LinkStats[index], sizeof(TLinkStats));
+// 	}
+// 	return errorcode;
+// }
+
+TLinkStats *stats_getLinkStat(int index)
 // Input:    index
-//           element = element to return
-// Return:   value
+// Return:   pointer to LinkStats struct
 // Purpose:  Gets a Link Stat for toolkitAPI
 //
 {
-	int errorcode = 0;
-
-	// Check if Open
-	if (swmm_IsOpenFlag() == FALSE)
-	{
-		errorcode = ERR_API_INPUTNOTOPEN;
-	}
-
-	// Check if Simulation is Running
-	else if (swmm_IsStartedFlag() == FALSE)
-	{
-		errorcode = ERR_API_SIM_NRUNNING;
-	}
-
-	// Check if object index is within bounds
-	else if (index < 0 || index >= Nobjects[LINK])
-	{
-		errorcode = ERR_API_OBJECT_INDEX;
-	}
-
-	else
-	{
-		// Copy Structure
-		memcpy(linkStats, &LinkStats[index], sizeof(TLinkStats));
-	}
-	return errorcode;
+    return &LinkStats[index];
 }
 
-int stats_getPumpStat(int index, TPumpStats *pumpStats)
+// int stats_getPumpStat(int index, TPumpStats *pumpStats)
+//
+// {
+// 	int errorcode = 0;
+//
+// 	// Check if Open
+// 	if (swmm_IsOpenFlag() == FALSE)
+// 	{
+// 		errorcode = ERR_API_INPUTNOTOPEN;
+// 	}
+//
+// 	// Check if Simulation is Running
+// 	else if (swmm_IsStartedFlag() == FALSE)
+// 	{
+// 		errorcode = ERR_API_SIM_NRUNNING;
+// 	}
+//
+// 	// Check if object index is within bounds
+// 	else if (index < 0 || index >= Nobjects[LINK])
+// 	{
+// 		errorcode = ERR_API_OBJECT_INDEX;
+// 	}
+//
+// 	// Check if pump
+// 	else if (Link[index].type != PUMP)
+// 	{
+// 		errorcode = ERR_API_WRONG_TYPE;
+// 	}
+//
+// 	else
+// 	{
+// 		// fetch sub index
+// 		int k = Link[index].subIndex;
+// 		// Copy Structure
+// 		memcpy(pumpStats, &PumpStats[k], sizeof(TPumpStats));
+// 	}
+// 	return errorcode;
+// }
+
+TPumpStats *stats_getPumpStat(int index)
 //
 // Input:    subindex
-//           element = element to return
-// Return:   value
+// Return:   pointer to PumpStats struct
 // Purpose:  Gets a Pump Stat for toolkitAPI
 //
 {
-	int errorcode = 0;
-
-	// Check if Open
-	if (swmm_IsOpenFlag() == FALSE)
-	{
-		errorcode = ERR_API_INPUTNOTOPEN;
-	}
-
-	// Check if Simulation is Running
-	else if (swmm_IsStartedFlag() == FALSE)
-	{
-		errorcode = ERR_API_SIM_NRUNNING;
-	}
-
-	// Check if object index is within bounds
-	else if (index < 0 || index >= Nobjects[LINK])
-	{
-		errorcode = ERR_API_OBJECT_INDEX;
-	}
-
-	// Check if pump
-	else if (Link[index].type != PUMP)
-	{
-		errorcode = ERR_API_WRONG_TYPE;
-	}
-
-	else
-	{
-		// fetch sub index
-		int k = Link[index].subIndex;
-		// Copy Structure
-		memcpy(pumpStats, &PumpStats[k], sizeof(TPumpStats));
-	}
-	return errorcode;
+  int k = Link[index].subIndex;
+  return &PumpStats[k];
 }
 
 TSubcatchStats *stats_getSubcatchStat(int index)
 //
 // Input:    index
-//           element = element to return
-// Return:   value
+// Return:   pointer to SubcatchStats struct
 // Purpose:  Gets a Subcatchment Stat for toolkitAPI
 //
 {
