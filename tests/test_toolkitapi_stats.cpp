@@ -77,7 +77,6 @@ BOOST_FIXTURE_TEST_CASE(test_getLinkStats, FixtureBeforeEnd) {
 	BOOST_CHECK_SMALL(link_stats->maxDepth - 0.7871311, 0.001);
 
 	swmm_free((void **)&link_stats);
-
 }
 
 BOOST_FIXTURE_TEST_CASE(test_getOutfallStats, FixtureBeforeEnd) {
@@ -95,7 +94,7 @@ BOOST_FIXTURE_TEST_CASE(test_getOutfallStats, FixtureBeforeEnd) {
 	BOOST_REQUIRE(error == 0);
 
 	BOOST_CHECK_SMALL(outfall_stats->avgFlow - 2.7089677, 0.001);
-	BOOST_CHECK_SMALL(outfall_stats->maxFlow - 19.5761380, 0.01);
+	BOOST_CHECK_SMALL(outfall_stats->maxFlow - 19.5966826, 0.01);
 	BOOST_CHECK_EQUAL(outfall_stats->totalPeriods, 1574);
 	
 	BOOST_CHECK_SMALL(outfall_stats->totalLoad[0] - 409.7508625, 0.1);
