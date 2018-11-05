@@ -1055,61 +1055,14 @@ double massbal_getStoredMass(int p)
     return storedMass;
 }
 
-int massbal_getRoutingFlowTotal(TRoutingTotals *RoutingTotal)
-//
-// Input:    element = element to return
-// Return:   value
-// Purpose:  Gets the routing total for toolkitAPI
-//
+TRoutingTotals *massbal_getRoutingFlowTotal(void)
 {
-	int errorcode = 0;
-
-	// Check if Open
-	if (swmm_IsOpenFlag() == FALSE)
-	{
-		errorcode = ERR_API_INPUTNOTOPEN;
-	}
-
-	// Check if Simulation is Running
-	else if (swmm_IsStartedFlag() == FALSE)
-	{
-		errorcode = ERR_API_SIM_NRUNNING;
-	}
-
-	else
-	{
-		memcpy(RoutingTotal, &FlowTotals, sizeof(TRoutingTotals));
-	}
-
-	return errorcode;
+	return &FlowTotals;
 }
 
-int massbal_getRunoffTotal(TRunoffTotals *runoffTot)
-//
-// Input:    element = element to return
-// Return:   value
-// Purpose:  Gets the runoff total for toolkitAPI
-//
+TRunoffTotals *massbal_getRunoffTotal(void) 
 {
-	int errorcode = 0;
-
-	// Check if Open
-	if (swmm_IsOpenFlag() == FALSE)
-	{
-		errorcode = ERR_API_INPUTNOTOPEN;
-	}
-
-	// Check if Simulation is Running
-	else if (swmm_IsStartedFlag() == FALSE)
-	{
-		errorcode = ERR_API_SIM_NRUNNING;
-	}
-
-	else
-	{
-		memcpy(runoffTot, &RunoffTotals, sizeof(TRunoffTotals));
-	}
-	return errorcode;
+	return &RunoffTotals;
 }
 
 double massbal_getTotalArea(void)
@@ -1120,28 +1073,7 @@ double massbal_getTotalArea(void)
 	return TotalArea;
 }
 
-int massbal_getNodeTotalInflow(int index, double *value)
-//
-// Input:  NodeIndex
-// Output: Volume
-// Return: Error
-// Purpose: Used for ToolkitAPI to pull total Node Inflow.
+double massbal_getNodeTotalInflow(int index)
 {
-    int errorcode = 0;
-
-    // Check if Open
-    if (swmm_IsOpenFlag() == FALSE)
-    {
-        errorcode = ERR_API_INPUTNOTOPEN;
-    }
-	// Check if Simulation is Running
-    else if (swmm_IsStartedFlag() == FALSE)
-    {
-        errorcode = ERR_API_SIM_NRUNNING;
-    }
-    else
-    {
-		*value = NodeInflow[index];
-    }
-    return errorcode;
+	return NodeInflow[index];
 }
