@@ -23,6 +23,8 @@ BOOST_FIXTURE_TEST_CASE(get_pollut_values, FixtureBeforeStep){
     double* buildup_array;
     double* ponded_array;
     double elapsedTime = 0.0;
+
+	SM_SubcatchStats *subc_stats = NULL;
     // Pollutant IDs
     int TSS = 0;
     int Lead = 1;
@@ -39,10 +41,13 @@ BOOST_FIXTURE_TEST_CASE(get_pollut_values, FixtureBeforeStep){
         if (step_ind == 360) // (Jan 1, 1998 6:00am)
         {
             // buildup
-            error = swmm_getSubcatchPollut(subc_ind, SM_BUILDUP, &buildup_array);
-            BOOST_REQUIRE(error == ERR_NONE);
-            BOOST_CHECK_SMALL(buildup_array[TSS] - 31.906912, 0.0001);
-            BOOST_CHECK_SMALL(buildup_array[Lead] - 0.0, 0.0001);
+			error = swmm_getSubcatchStats(subc_ind, &subc_stats);
+			BOOST_REQUIRE(error == 0);
+
+            //error = swmm_getSubcatchPollut(subc_ind, SM_BUILDUP, &buildup_array);
+            //BOOST_REQUIRE(error == ERR_NONE);
+            BOOST_CHECK_SMALL(subc_stats->surfaceBuildup[TSS] - 31.906912, 0.0001);
+            BOOST_CHECK_SMALL(subc_stats->surfaceBuildup[Lead] - 0.0, 0.0001);
 
             // ponded concentration
             error = swmm_getSubcatchPollut(subc_ind, SM_CPONDED, &ponded_array);
@@ -54,10 +59,13 @@ BOOST_FIXTURE_TEST_CASE(get_pollut_values, FixtureBeforeStep){
         if (step_ind == 720) // (Jan 1, 1998 12:00pm)
         {
             // buildup
-            error = swmm_getSubcatchPollut(subc_ind, SM_BUILDUP, &buildup_array);
-            BOOST_REQUIRE(error == ERR_NONE);
-            BOOST_CHECK_SMALL(buildup_array[TSS] - 32.354460, 0.0001);
-            BOOST_CHECK_SMALL(buildup_array[Lead] - 0.0, 0.0001);
+			error = swmm_getSubcatchStats(subc_ind, &subc_stats);
+			BOOST_REQUIRE(error == 0);
+
+            //error = swmm_getSubcatchPollut(subc_ind, SM_BUILDUP, &buildup_array);
+            //BOOST_REQUIRE(error == ERR_NONE);
+            BOOST_CHECK_SMALL(subc_stats->surfaceBuildup[TSS] - 32.354460, 0.0001);
+            BOOST_CHECK_SMALL(subc_stats->surfaceBuildup[Lead] - 0.0, 0.0001);
 
             // ponded concentration
             error = swmm_getSubcatchPollut(subc_ind, SM_CPONDED, &ponded_array);
@@ -72,7 +80,7 @@ BOOST_FIXTURE_TEST_CASE(get_pollut_values, FixtureBeforeStep){
     }while (elapsedTime != 0 && !error);
     BOOST_REQUIRE(error == ERR_NONE);
 
-    swmm_free((void**) &buildup_array);
+    swmm_free((void **)&subc_stats);
     swmm_free((void**) &ponded_array);
 
     swmm_end();
