@@ -118,13 +118,16 @@ int  stats_open()
     SubcatchStats = NULL;
     if ( Nobjects[SUBCATCH] > 0 )
     {
-        SubcatchStats = (TSubcatchStats *) calloc(Nobjects[SUBCATCH],
-                                               sizeof(TSubcatchStats));
+		// SubcatchStats contains a flexible array member to hold pollutants
+        SubcatchStats = (TSubcatchStats *) malloc(Nobjects[SUBCATCH] *  
+			sizeof(TSubcatchStats) + Nobjects[POLLUT] * sizeof(double));
+
         if ( !SubcatchStats )
         {
             report_writeErrorMsg(ERR_MEMORY, "");
             return ErrorCode;
         }
+
         for (j=0; j<Nobjects[SUBCATCH]; j++)
         {
             SubcatchStats[j].precip  = 0.0;
@@ -135,6 +138,11 @@ int  stats_open()
             SubcatchStats[j].maxFlow = 0.0;
             SubcatchStats[j].impervRunoff = 0.0;                               //(5.1.013)
             SubcatchStats[j].pervRunoff   = 0.0;                               //
+			if (Nobjects[POLLUT] > 0)
+			{
+				for (k = 0; k < Nobjects[POLLUT]; k++)
+					SubcatchStats[j].surfaceBuildup[k] = 0.0;
+			}
         }
 
         for (j=0; j<Nobjects[SUBCATCH]; j++)
@@ -356,6 +364,8 @@ void   stats_updateSubcatchStats(int j, double rainVol, double runonVol,
 //  Purpose: updates totals of runoff components for a specific subcatchment.
 //
 {
+	int p;
+
     SubcatchStats[j].precip += rainVol;
     SubcatchStats[j].runon  += runonVol;
     SubcatchStats[j].evap   += evapVol;
@@ -364,6 +374,9 @@ void   stats_updateSubcatchStats(int j, double rainVol, double runonVol,
     SubcatchStats[j].maxFlow = MAX(SubcatchStats[j].maxFlow, runoff);
 	SubcatchStats[j].impervRunoff += impervVol;                                //(5.1.013)
 	SubcatchStats[j].pervRunoff += pervVol;                                    //
+
+	for (p = 0; p < Nobjects[POLLUT]; p++)
+		SubcatchStats[j].surfaceBuildup[p] = subcatch_getBuildup(j, p);
 }
 
 //=============================================================================

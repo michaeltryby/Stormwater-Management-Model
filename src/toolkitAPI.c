@@ -21,10 +21,10 @@
 #include "hash.h"
 
 // Function Declarations for API
-int     massbal_getRoutingFlowTotal(SM_RoutingTotals *routingTot);
-int     massbal_getRunoffTotal(SM_RunoffTotals *runoffTot);
+TRoutingTotals *massbal_getRoutingFlowTotal(void);
+TRunoffTotals  *massbal_getRunoffTotal(void);
 double  massbal_getTotalArea(void);
-int     massbal_getNodeTotalInflow(int index, double *value);
+double  massbal_getNodeTotalInflow(int index);
 
 TNodeStats     *stats_getNodeStat(int index);
 TStorageStats  *stats_getStorageStat(int index);
@@ -1021,15 +1021,15 @@ int DLLEXPORT swmm_getSubcatchPollut(int index, int type, double **PollutArray)
     {
         switch (type)
         {
-            case SM_BUILDUP:
-            {
-                a = Subcatch[index].area;
-                for (p = 0; p < Nobjects[POLLUT]; p++)
-                {
-                    result[p] = Subcatch[index].surfaceBuildup[p] /
-                        (a * UCF(LANDAREA));
-                } *PollutArray = result;
-            } break;
+            //case SM_BUILDUP:
+            //{
+            //    a = Subcatch[index].area;
+            //    for (p = 0; p < Nobjects[POLLUT]; p++)
+            //    {
+            //        result[p] = Subcatch[index].surfaceBuildup[p] /
+            //            (a * UCF(LANDAREA));
+            //    } *PollutArray = result;
+            //} break;
             case SM_CPONDED:
             {
                 for (p = 0; p < Nobjects[POLLUT]; p++)
@@ -1147,11 +1147,22 @@ int DLLEXPORT swmm_getNodeTotalInflow(int index, double *value)
 /// Return:  API Error
 /// Purpose: Get Node Total Inflow Volume.
 {
-    //*value = 0;
-    int errorcode = massbal_getNodeTotalInflow(index, value);
+	int errorcode = 0;
 
-    if (errorcode == 0)
-    {
+	// Check if Open
+	if (swmm_IsOpenFlag() == FALSE)
+	{
+		errorcode = ERR_API_INPUTNOTOPEN;
+	}
+	// Check if Simulation is Running
+	else if (swmm_IsStartedFlag() == FALSE)
+	{
+		errorcode = ERR_API_SIM_NRUNNING;
+	}
+	else
+	{
+		*value = massbal_getNodeTotalInflow(index);
+
         *value *= UCF(VOLUME);
     }
 
@@ -1189,7 +1200,7 @@ int DLLEXPORT swmm_getStorageStats(int index, SM_StorageStats **storageStats)
 
     else if (MEMCHECK(tmp = (TStorageStats *)calloc(1, sizeof(TStorageStats))))
       errorcode = ERR_MEMORY;
- 
+
 	else
   	{
   		// Copy Structure
@@ -1244,7 +1255,7 @@ int DLLEXPORT swmm_getOutfallStats(int index, SM_OutfallStats **outfallStats)
  		errorcode = ERR_API_WRONG_TYPE;
  	}
 	// TOutfallStats contains a flexible array member
-	else if (MEMCHECK(tmp = (TOutfallStats *)malloc(Nnodes[OUTFALL] *
+	else if (MEMCHECK(tmp = (TOutfallStats *)malloc(1 *
 		sizeof(TOutfallStats) + Nobjects[POLLUT] * sizeof(double))))
 		errorcode = ERR_MEMORY;
 
@@ -1255,7 +1266,7 @@ int DLLEXPORT swmm_getOutfallStats(int index, SM_OutfallStats **outfallStats)
  		// Copy totalLoads for pollutants
 		memcpy(tmp->totalLoad, stats_getOutfallStat(index)->totalLoad,
 			Nobjects[POLLUT] * sizeof(double));
-	
+
 		*outfallStats = (SM_OutfallStats *)tmp;
 
         // Current Average Flow
@@ -1310,7 +1321,7 @@ int DLLEXPORT swmm_getLinkStats(int index, SM_LinkStats **linkStats)
  	{
  		errorcode = ERR_API_OBJECT_INDEX;
  	}
-	
+
 	else if (MEMCHECK(tmp = (TLinkStats *)calloc(1, sizeof(TLinkStats))))
 		errorcode = ERR_MEMORY;
 
@@ -1353,7 +1364,7 @@ int DLLEXPORT swmm_getPumpStats(int index, SM_PumpStats **pumpStats)
 /// Output:  Pump Link Stats Structure (SM_PumpStats)
 /// Return:  API Error
 /// Purpose: Gets Pump Link Stats and Converts Units
-/// Note: This function allocates memory. Use swmm_free() to deallocate it. 
+/// Note: This function allocates memory. Use swmm_free() to deallocate it.
 {
  	int errorcode = 0;
 	TPumpStats *tmp = NULL;
@@ -1381,7 +1392,7 @@ int DLLEXPORT swmm_getPumpStats(int index, SM_PumpStats **pumpStats)
  	{
  		errorcode = ERR_API_WRONG_TYPE;
  	}
-	
+
 	else if (MEMCHECK(tmp = (TPumpStats *)calloc(1, sizeof(TPumpStats))))
 		errorcode = ERR_MEMORY;
 
@@ -1417,7 +1428,7 @@ int DLLEXPORT swmm_getSubcatchStats(int index, SM_SubcatchStats **subcatchStats)
 /// Output:  Subcatchment Stats Structure (SM_SubcatchStats)
 /// Return:  API Error
 /// Purpose: Gets Subcatchment Stats and Converts Units
-/// Note: This function allocates memory. Use swmm_free() to deallocate it. 
+/// Note: This function allocates memory. Use swmm_free() to deallocate it.
 {
   int errorcode = 0;
   TSubcatchStats *tmp = NULL;
@@ -1439,14 +1450,20 @@ int DLLEXPORT swmm_getSubcatchStats(int index, SM_SubcatchStats **subcatchStats)
   {
 	  errorcode = ERR_API_OBJECT_INDEX;
   }
-  else if (MEMCHECK(tmp = (TSubcatchStats *)calloc(1, sizeof(TSubcatchStats))))
+  // TSubcatchStats contains a flexible array member
+  else if (MEMCHECK(tmp = (TSubcatchStats *)malloc(1 *
+	  sizeof(TSubcatchStats) + Nobjects[POLLUT] * sizeof(double))))
 	  errorcode = ERR_MEMORY;
 
   else
   {
 	  // Copy Structure
-    memcpy(tmp, stats_getSubcatchStat(index), sizeof(TSubcatchStats));
-    *subcatchStats = (SM_SubcatchStats *)tmp;
+	  memcpy(tmp, stats_getSubcatchStat(index), sizeof(TSubcatchStats));
+	  // Copy surface buildups for pollutants
+	  memcpy(tmp->surfaceBuildup, stats_getSubcatchStat(index)->surfaceBuildup,
+		  Nobjects[POLLUT] * sizeof(double));
+
+	  *subcatchStats = (SM_SubcatchStats *)tmp;
 
     double a = Subcatch[index].area;
 
@@ -1462,6 +1479,11 @@ int DLLEXPORT swmm_getSubcatchStats(int index, SM_SubcatchStats **subcatchStats)
     (*subcatchStats)->precip *= (UCF(RAINDEPTH) / a);
     // Cumulative Evaporation Volume
     (*subcatchStats)->evap *= UCF(VOLUME);
+
+	// Convert Mass Units
+	if (Nobjects[POLLUT] > 0)
+		for (int p = 0; p < Nobjects[POLLUT]; p++)
+			(*subcatchStats)->surfaceBuildup[p] /= (a * UCF(LANDAREA));
   }
 
     return (errorcode);
@@ -1474,10 +1496,26 @@ int DLLEXPORT swmm_getSystemRoutingStats(SM_RoutingTotals *routingTot)
 /// Return:  API Error
 /// Purpose: Gets System Flow Routing Totals and Converts Units
 {
-    int errorcode = massbal_getRoutingFlowTotal(routingTot);
+	int errorcode = 0;
+	TRoutingTotals *tmp = NULL;
 
-    if (errorcode == 0)
-    {
+	// Check if Open
+	if (swmm_IsOpenFlag() == FALSE)
+	{
+		errorcode = ERR_API_INPUTNOTOPEN;
+	}
+
+	// Check if Simulation is Running
+	else if (swmm_IsStartedFlag() == FALSE)
+	{
+		errorcode = ERR_API_SIM_NRUNNING;
+	}
+
+	else
+	{
+		memcpy(tmp, massbal_getRoutingFlowTotal(), sizeof(TRoutingTotals));
+		routingTot = (SM_RoutingTotals *)tmp;
+
         // Cumulative Dry Weather Inflow Volume
         routingTot->dwInflow *= UCF(VOLUME);
         // Cumulative Wet Weather Inflow Volume
@@ -1509,10 +1547,26 @@ int DLLEXPORT swmm_getSystemRunoffStats(SM_RunoffTotals *runoffTot)
 /// Return:  API Error
 /// Purpose: Gets System Runoff Totals and Converts Units
 {
-    int errorcode =  massbal_getRunoffTotal(runoffTot);
+	int errorcode = 0;
+	TRunoffTotals *tmp = NULL;
 
-    if (errorcode == 0)
-    {
+	// Check if Open
+	if (swmm_IsOpenFlag() == FALSE)
+	{
+		errorcode = ERR_API_INPUTNOTOPEN;
+	}
+
+	// Check if Simulation is Running
+	else if (swmm_IsStartedFlag() == FALSE)
+	{
+		errorcode = ERR_API_SIM_NRUNNING;
+	}
+
+	else
+	{
+		memcpy(tmp, massbal_getRunoffTotal(), sizeof(TRunoffTotals));
+		runoffTot = (SM_RunoffTotals *)tmp;
+
         double TotalArea = massbal_getTotalArea();
         // Cumulative Rainfall Depth
         runoffTot->rainfall *= (UCF(RAINDEPTH) / TotalArea);

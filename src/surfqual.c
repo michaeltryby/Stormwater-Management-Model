@@ -71,7 +71,7 @@ void surfqual_initState(int j)
         Subcatch[j].newQual[p] = 0.0;
         Subcatch[j].pondedQual[p] = 0.0;
         Subcatch[j].concPonded[p] = 0.0;
-        Subcatch[j].surfaceBuildup[p] = 0.0;
+//        Subcatch[j].surfaceBuildup[p] = 0.0;
     }
 
     // --- initialize pollutant buildup
@@ -281,7 +281,7 @@ void  surfqual_getWashoff(int j, double runoff, double tStep)
         Subcatch[j].newQual[p] = cOut / LperFT3;
         
         // --- update surface buildup loads (in lbs or kg)
-        Subcatch[j].surfaceBuildup[p] = subcatch_getBuildup( j, p );
+//        Subcatch[j].surfaceBuildup[p] = subcatch_getBuildup( j, p );
     }
 
     // --- add contribution of LID drain flows to mass balance 

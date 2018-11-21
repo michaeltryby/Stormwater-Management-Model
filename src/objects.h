@@ -60,6 +60,11 @@
 #include "infil.h"
 #include "exfil.h"
 
+
+// Support for Flexible Array Members (FAMs) in C++ is non-standard MS extension  
+#pragma warning(disable : 4200)
+
+
 //-----------------
 // FILE INFORMATION
 //-----------------
@@ -398,7 +403,7 @@ typedef struct
    double*       pondedQual;      // ponded surface water quality (mass)
    double*       concPonded;      // ponded surface water quality concentration (mass/L)
    double*       totalLoad;       // total washoff load (lbs or kg)
-   double*       surfaceBuildup;  // surface buildup (mass)
+//   double*       surfaceBuildup;  // surface buildup (mass)
 }  TSubcatch;
 
 //-----------------------
@@ -935,8 +940,9 @@ typedef struct
     double       infil;
     double       runoff;
     double       maxFlow;         
-	double       impervRunoff;                                                 //(5.1.013)
-	double       pervRunoff;                                                   //
+	double       impervRunoff;
+	double       pervRunoff;
+	double       surfaceBuildup[];   // Flexible Array Member 
 }  TSubcatchStats;
 
 
@@ -979,8 +985,6 @@ typedef struct
 //-------------------
 // OUTFALL STATISTICS
 //-------------------
- // Support for FAMs in C++ is non-standard MS extension  
-#pragma warning(disable : 4200)
 typedef struct
 {
    double       avgFlow;

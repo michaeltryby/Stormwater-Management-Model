@@ -170,12 +170,19 @@ BOOST_FIXTURE_TEST_CASE(test_getOutfallStats, FixtureBeforeEnd) {
 
 BOOST_FIXTURE_TEST_CASE(test_getSubcatchStats, FixtureBeforeEnd){
 
-    int subc_ind;
+    int n, subc_ind;
 
     char subid[] = "1";
 
     // Subcatchment
     SM_SubcatchStats *subc_stats = NULL;
+
+	vector<double> test_vec;
+	std::vector<double> pol_vec = {
+		33.5859153,
+		0.0
+	};
+
 
     error = swmm_getObjectIndex(SM_SUBCATCH, subid, &subc_ind);
     BOOST_REQUIRE(error == 0);
@@ -190,7 +197,15 @@ BOOST_FIXTURE_TEST_CASE(test_getSubcatchStats, FixtureBeforeEnd){
     BOOST_CHECK_SMALL(subc_stats->precip - 2.65, 0.0001);
     BOOST_CHECK_SMALL(subc_stats->evap - 0.0, 0.0001);
 
-    swmm_free((void **)&subc_stats);
+	error = swmm_countObjects(SM_POLLUT, &n);
+	BOOST_REQUIRE(error == 0);
+
+	for (int i = 0; i < n; i++)
+		test_vec.push_back(subc_stats->surfaceBuildup[i]);
+
+	BOOST_CHECK(check_cdd(test_vec, pol_vec, 3));
+
+	swmm_free((void **)&subc_stats);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

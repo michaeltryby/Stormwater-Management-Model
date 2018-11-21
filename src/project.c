@@ -1029,7 +1029,7 @@ void createObjects()
         Subcatch[j].pondedQual = (double *) calloc(Nobjects[POLLUT], sizeof(double));
         Subcatch[j].concPonded = (double *) calloc(Nobjects[POLLUT], sizeof(double));
         Subcatch[j].totalLoad  = (double *) calloc(Nobjects[POLLUT], sizeof(double));
-        Subcatch[j].surfaceBuildup = (double *) calloc(Nobjects[POLLUT], sizeof(double));
+//        Subcatch[j].surfaceBuildup = (double *) calloc(Nobjects[POLLUT], sizeof(double));
     }
     for (j = 0; j < Nobjects[NODE]; j++)
     {

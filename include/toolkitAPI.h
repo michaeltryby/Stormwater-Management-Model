@@ -413,6 +413,9 @@ typedef struct
     double       infil;
     double       runoff;
     double       maxFlow;
+	double       impervRunoff;
+	double       pervRunoff;
+	double       surfaceBuildup[];    // Flexible Array Member
 }  SM_SubcatchStats;
 
 /** @struct SM_RoutingTotals
