@@ -26,7 +26,7 @@ case "${unameOut}" in
     MINGW*)     ;&
     MSYS*)      # Remove leading '/c' from file path for nrtest
                 abs_build_path="$( echo "$1" | sed -e 's#/c##' )"
-                test_cmd="run-swmm.exe"
+                test_cmd="runswmm.exe"
                 ;;
 
     *)          # Machine unknown
