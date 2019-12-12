@@ -2,3 +2,5 @@
 # Eclipse Stuff
 .metadata/
 .settings/
+
+build/

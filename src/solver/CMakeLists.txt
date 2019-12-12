@@ -24,12 +24,11 @@ add_library(swmm5
         ${SWMM_SOURCES}
     )
 
-if(OpenMP_C_FOUND)
-    target_link_libraries(swmm5
-        PUBLIC
-            OpenMP::OpenMP_C
-        )
-endif()
+target_link_libraries(swmm5
+    PUBLIC
+        $<$<NOT:$<BOOL:C_COMPILER_ID:MSVC>>:m>
+        $<$<BOOL:OpenMP_C_FOUND>:OpenMP::OpenMP_C>
+    )
 
 target_include_directories(swmm5
     PUBLIC

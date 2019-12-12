@@ -12,10 +12,7 @@
 add_executable(runswmm
     main.c
     )
-target_include_directories(runswmm
-    PUBLIC
-        include
-    )
+    
 target_link_libraries(runswmm
     LINK_PUBLIC
         swmm5
