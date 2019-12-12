@@ -26,7 +26,7 @@ add_library(swmm5
 
 target_link_libraries(swmm5
     PUBLIC
-        $<$<NOT:$<BOOL:C_COMPILER_ID:MSVC>>:m>
+        $<$<NOT:$<BOOL:$<C_COMPILER_ID:MSVC>>>:m>
         $<$<BOOL:OpenMP_C_FOUND>:OpenMP::OpenMP_C>
     )
 
