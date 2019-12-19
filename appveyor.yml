@@ -18,3 +18,4 @@ build_script:
 
 test_script:
 - bash tools/before-nrtest.sh $TEST_HOME $SWMM_HOME/$BUILD_HOME/bin linux
+- python.exe nrtest execute apps/swmm-linux.json  tests/examples tests/extran tests/routing tests/swc tests/update_v5111 tests/user -o benchmark/swmm-linux
