@@ -20,7 +20,7 @@ unameOut="$(uname -s)"
 case "${unameOut}" in
     Linux*)     ;&
     Darwin*)    abs_build_path=$1
-                test_cmd="run-swmm"
+                test_cmd="runswmm"
                 ;;
 
     MINGW*)     ;&
