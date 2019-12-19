@@ -22,6 +22,6 @@ test_script:
 - nrtest execute apps/swmm-linux.json  tests/examples tests/extran tests/routing tests/swc tests/update_v5111 tests/user -o benchmark/swmm-linux
 
 on_failure:
-- cd %TEST_HOME%/benchmark
+- cd benchmark
 - 7za a benchmark-linux.zip ./swmm-linux
 - appveyor PushArtifact benchmark-linux.zip
