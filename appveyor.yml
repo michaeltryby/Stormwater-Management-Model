@@ -20,3 +20,8 @@ test_script:
 - bash tools/before-nrtest.sh $TEST_HOME $SWMM_HOME/$BUILD_HOME/bin linux
 - cd $TEST_HOME
 - nrtest execute apps/swmm-linux.json  tests/examples tests/extran tests/routing tests/swc tests/update_v5111 tests/user -o benchmark/swmm-linux
+
+on_failure:
+- cd %TEST_HOME%/benchmark
+- 7za a benchmark-linux.zip ./swmm-linux
+- appveyor PushArtifact benchmark-linux.zip
