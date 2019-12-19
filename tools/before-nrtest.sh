@@ -56,4 +56,4 @@ ln -s swmm-nrtestsuite-${EXAMPLES_VER}/public tests
 
 # generate json configuration file for software under test
 mkdir apps
-${SCRIPT_HOME}/app-config.sh $2 > apps/swmm-$3.json
+bash ${SCRIPT_HOME}/app-config.sh $2 > apps/swmm-$3.json
