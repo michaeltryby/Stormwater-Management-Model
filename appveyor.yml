@@ -17,4 +17,4 @@ build_script:
 - cmake --build ./build
 
 test_script:
-- tools/before-nrtest.sh $TEST_HOME $SWMM_HOME/$BUILD_HOME/bin linux
+- bash tools/before-nrtest.sh $TEST_HOME $SWMM_HOME/$BUILD_HOME/bin linux
