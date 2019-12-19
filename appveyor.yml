@@ -1,6 +1,8 @@
 
 image: Ubuntu
 
+stack: python 3.6
+
 init:
 - SWMM_HOME=$APPVEYOR_BUILD_FOLDER
 - BUILD_HOME=build
