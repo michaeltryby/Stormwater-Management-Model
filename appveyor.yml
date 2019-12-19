@@ -1,7 +1,18 @@
 
 image: Ubuntu
 
+init:
+- SWMM_HOME=$APPVEYOR_BUILD_FOLDER
+- BUILD_HOME=build
+- TEST_HOME=nrtests
+
+install:
+- python -m pip install nrtest
+
 build_script:
 - cmake -E make_directory build
 - cmake -E chdir build cmake ..
 - cmake --build ./build
+
+test_script:
+- tools/before-nrtest.sh $TEST_HOME $SWMM_HOME/$BUILD_HOME/bin linux
