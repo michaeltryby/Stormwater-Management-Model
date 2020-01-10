@@ -26,6 +26,4 @@ on_failure:
 - cd benchmark
 - 7za a benchmark-linux.zip ./swmm-linux
 - appveyor PushArtifact benchmark-linux.zip
-- cd ../../$BUILD_HOME
-- tar -czvf build-linux.tar.gz .
-- appveyor PushArtifact build-linux.tar.gz
+- appveyor PushArtifact ../../$BUILD_HOME/CMakeCache.txt
