@@ -7,14 +7,13 @@ init:
 - SWMM_HOME=$APPVEYOR_BUILD_FOLDER
 - BUILD_HOME=build
 - TEST_HOME=nrtests
-- gcc -v
 
 install:
 - python -m pip install nrtest
 
 build_script:
 - cmake -E make_directory build
-- cmake -E chdir build cmake -DCMAKE_BUILD_TYPE=Release ..
+- cmake -E chdir build cmake ..
 - cmake --build ./build -- VERBOSE=1
 
 test_script:
