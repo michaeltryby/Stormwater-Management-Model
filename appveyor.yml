@@ -7,6 +7,7 @@ init:
 - SWMM_HOME=$APPVEYOR_BUILD_FOLDER
 - BUILD_HOME=build
 - TEST_HOME=nrtests
+- gcc -v
 
 install:
 - python -m pip install nrtest
