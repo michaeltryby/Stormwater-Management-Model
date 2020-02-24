@@ -351,7 +351,7 @@ int EXPORT_OUT_API SMO_getUnits(SMO_Handle p_handle, int **unitFlag, int *length
     return set_error(p_data->error_handle, errorcode);
 }
 
-int EXPORT_OUT_API SMO_getFlowUnits(SMO_Handle p_handle, int *unitFlag)
+//int EXPORT_OUT_API SMO_getFlowUnits(SMO_Handle p_handle, int *unitFlag)
 //
 //   Purpose: Returns unit flag for flow.
 //
@@ -363,25 +363,25 @@ int EXPORT_OUT_API SMO_getFlowUnits(SMO_Handle p_handle, int *unitFlag)
 //            4: LPS  (liters per second)
 //            5: MLD  (million liters per day)
 //
-{
-    int     errorcode = 0;
-    data_t* p_data;
+// {
+//     int     errorcode = 0;
+//     data_t* p_data;
+//
+//     *unitFlag = -1;
+//
+//     p_data = (data_t*)p_handle;
+//
+//     if (p_data == NULL)
+//         return -1;
+//     else {
+//         fseek(p_data->file, 2 * RECORDSIZE, SEEK_SET);
+//         fread(unitFlag, RECORDSIZE, 1, p_data->file);
+//     }
+//
+//     return set_error(p_data->error_handle, errorcode);
+// }
 
-    *unitFlag = -1;
-
-    p_data = (data_t*)p_handle;
-
-    if (p_data == NULL)
-        return -1;
-    else {
-        fseek(p_data->file, 2 * RECORDSIZE, SEEK_SET);
-        fread(unitFlag, RECORDSIZE, 1, p_data->file);
-    }
-
-    return set_error(p_data->error_handle, errorcode);
-}
-
-int EXPORT_OUT_API SMO_getPollutantUnits(SMO_Handle p_handle, int **unitFlag, int *length)
+//int EXPORT_OUT_API SMO_getPollutantUnits(SMO_Handle p_handle, int **unitFlag, int *length)
 //
 //   Purpose:
 //     Return integer flag representing the units that the given pollutant is
@@ -394,29 +394,29 @@ int EXPORT_OUT_API SMO_getPollutantUnits(SMO_Handle p_handle, int **unitFlag, in
 //
 //   Args:
 //     pollutantIndex: valid values are 0 to Npolluts-1
-{
-    int    errorcode = 0;
-    int    *temp;
-    F_OFF  offset;
-    data_t *p_data;
-
-    p_data = (data_t *)p_handle;
-
-    if (p_data == NULL)
-        errorcode = -1;
-    else if (MEMCHECK(temp = newIntArray(p_data->Npolluts)))
-        errorcode = 414;
-    else {
-        offset = p_data->ObjPropPos - (p_data->Npolluts * RECORDSIZE);
-        _fseek(p_data->file, offset, SEEK_SET);
-        fread(temp, RECORDSIZE, p_data->Npolluts, p_data->file);
-
-        *unitFlag = temp;
-        *length   = p_data->Npolluts;
-    }
-
-    return set_error(p_data->error_handle, errorcode);
-}
+// {
+//     int    errorcode = 0;
+//     int    *temp;
+//     F_OFF  offset;
+//     data_t *p_data;
+//
+//     p_data = (data_t *)p_handle;
+//
+//     if (p_data == NULL)
+//         errorcode = -1;
+//     else if (MEMCHECK(temp = newIntArray(p_data->Npolluts)))
+//         errorcode = 414;
+//     else {
+//         offset = p_data->ObjPropPos - (p_data->Npolluts * RECORDSIZE);
+//         _fseek(p_data->file, offset, SEEK_SET);
+//         fread(temp, RECORDSIZE, p_data->Npolluts, p_data->file);
+//
+//         *unitFlag = temp;
+//         *length   = p_data->Npolluts;
+//     }
+//
+//     return set_error(p_data->error_handle, errorcode);
+// }
 
 int EXPORT_OUT_API SMO_getStartDate(SMO_Handle p_handle, double *date)
 //
@@ -670,7 +670,7 @@ int EXPORT_OUT_API SMO_getSystemSeries(SMO_Handle p_handle, SMO_systemAttribute 
     errorcode = 411;
     else {
         // loop over and build time series
-        for (k = 0; k < length; k++)
+        for (k = 0; k < len; k++)
             temp[k] = getSystemValue(p_data, startPeriod + k, attr);
 
         *outValueArray = temp;

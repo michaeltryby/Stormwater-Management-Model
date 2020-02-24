@@ -183,35 +183,35 @@ BOOST_FIXTURE_TEST_CASE(test_getUnits, Fixture) {
     SMO_free((void**)&i_array);
 }
 
-BOOST_FIXTURE_TEST_CASE(test_getFlowUnits, Fixture) {
-    int units = -1;
-
-    error = SMO_getFlowUnits(p_handle, &units);
-    BOOST_REQUIRE(error == 0);
-    BOOST_CHECK_EQUAL(0, units);
-}
-
-BOOST_FIXTURE_TEST_CASE(test_getPollutantUnits, Fixture) {
-    int* i_array = NULL;
-
-    error = SMO_getPollutantUnits(p_handle, &i_array, &array_dim);
-    BOOST_REQUIRE(error == 0);
-
-    std::vector<int> test;
-    test.assign(i_array, i_array + array_dim);
-
-    const int ref_dim            = 2;
-    int       ref_array[ref_dim] = {0, 1};
-
-    std::vector<int> ref;
-    ref.assign(ref_array, ref_array + ref_dim);
-
-    BOOST_CHECK_EQUAL_COLLECTIONS(ref.begin(), ref.end(), test.begin(),
-                                  test.end());
-
-    SMO_free((void**)&i_array);
-    BOOST_CHECK(i_array == NULL);
-}
+// BOOST_FIXTURE_TEST_CASE(test_getFlowUnits, Fixture) {
+//     int units = -1;
+//
+//     error = SMO_getFlowUnits(p_handle, &units);
+//     BOOST_REQUIRE(error == 0);
+//     BOOST_CHECK_EQUAL(0, units);
+// }
+//
+// BOOST_FIXTURE_TEST_CASE(test_getPollutantUnits, Fixture) {
+//     int* i_array = NULL;
+//
+//     error = SMO_getPollutantUnits(p_handle, &i_array, &array_dim);
+//     BOOST_REQUIRE(error == 0);
+//
+//     std::vector<int> test;
+//     test.assign(i_array, i_array + array_dim);
+//
+//     const int ref_dim            = 2;
+//     int       ref_array[ref_dim] = {0, 1};
+//
+//     std::vector<int> ref;
+//     ref.assign(ref_array, ref_array + ref_dim);
+//
+//     BOOST_CHECK_EQUAL_COLLECTIONS(ref.begin(), ref.end(), test.begin(),
+//                                   test.end());
+//
+//     SMO_free((void**)&i_array);
+//     BOOST_CHECK(i_array == NULL);
+// }
 
 BOOST_FIXTURE_TEST_CASE(test_getStartDate, Fixture) {
     double date = -1;
