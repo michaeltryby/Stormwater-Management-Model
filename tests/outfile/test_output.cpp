@@ -116,7 +116,7 @@ struct Fixture {
         array_dim = 0;
     }
     ~Fixture() {
-        SMO_free((void**)&array);
+        SMO_freeMemory((void*)array);
         error = SMO_close(&p_handle);
     }
 
@@ -158,7 +158,7 @@ BOOST_FIXTURE_TEST_CASE(test_getProjectSize, Fixture) {
     BOOST_CHECK_EQUAL_COLLECTIONS(ref.begin(), ref.end(), test.begin(),
                                   test.end());
 
-    SMO_free((void**)&i_array);
+    SMO_freeMemory((void*)i_array);
 }
 
 BOOST_FIXTURE_TEST_CASE(test_getUnits, Fixture) {
@@ -180,7 +180,7 @@ BOOST_FIXTURE_TEST_CASE(test_getUnits, Fixture) {
     BOOST_CHECK_EQUAL_COLLECTIONS(ref.begin(), ref.end(), test.begin(),
                                   test.end());
 
-    SMO_free((void**)&i_array);
+    SMO_freeMemory((void*)i_array);
 }
 
 // BOOST_FIXTURE_TEST_CASE(test_getFlowUnits, Fixture) {
@@ -209,7 +209,7 @@ BOOST_FIXTURE_TEST_CASE(test_getUnits, Fixture) {
 //     BOOST_CHECK_EQUAL_COLLECTIONS(ref.begin(), ref.end(), test.begin(),
 //                                   test.end());
 //
-//     SMO_free((void**)&i_array);
+//     SMO_freeMemory((void**)&i_array);
 //     BOOST_CHECK(i_array == NULL);
 // }
 
@@ -247,7 +247,7 @@ BOOST_FIXTURE_TEST_CASE(test_getElementName, Fixture) {
     std::string ref("10");
     BOOST_CHECK(check_string(test, ref));
 
-    SMO_free((void**)&c_array);
+    SMO_freeMemory((void*)c_array);
 }
 
 BOOST_FIXTURE_TEST_CASE(test_getSubcatchSeries, Fixture) {
