@@ -123,7 +123,7 @@ int EXPORT_OUT_API SMO_init(SMO_Handle *p_handle)
     return errorcode;
 }
 
-int EXPORT_OUT_API SMO_close(SMO_Handle* p_handle)
+int EXPORT_OUT_API SMO_close(SMO_Handle p_handle)
 //
 //   Purpose: Clean up after and close Output API
 //
@@ -131,7 +131,7 @@ int EXPORT_OUT_API SMO_close(SMO_Handle* p_handle)
     data_t *p_data;
     int i, n, errorcode = 0;
 
-    p_data = (data_t *)*p_handle;
+    p_data = (data_t *)p_handle;
 
     if (p_data == NULL)
         errorcode = -1;
@@ -153,8 +153,6 @@ int EXPORT_OUT_API SMO_close(SMO_Handle* p_handle)
             fclose(p_data->file);
 
         free(p_data);
-
-        *p_handle = NULL;
     }
 
     return errorcode;
@@ -239,7 +237,7 @@ int EXPORT_OUT_API SMO_open(SMO_Handle p_handle, const char *path)
     // If error close the binary file
     if (errorcode > 400) {
         set_error(p_data->error_handle, errorcode);
-        SMO_close(&p_handle);
+        SMO_close(p_handle);
     }
 
     return errorcode;

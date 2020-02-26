@@ -79,16 +79,15 @@ BOOST_AUTO_TEST_CASE(InitTest) {
     BOOST_REQUIRE(error == 0);
     BOOST_CHECK(p_handle != NULL);
 
-    SMO_close(&p_handle);
+    SMO_close(p_handle);
 }
 
 BOOST_AUTO_TEST_CASE(CloseTest) {
     SMO_Handle p_handle = NULL;
     SMO_init(&p_handle);
 
-    int error = SMO_close(&p_handle);
+    int error = SMO_close(p_handle);
     BOOST_REQUIRE(error == 0);
-    BOOST_CHECK(p_handle == NULL);
 }
 
 BOOST_AUTO_TEST_CASE(InitOpenCloseTest) {
@@ -99,7 +98,7 @@ BOOST_AUTO_TEST_CASE(InitOpenCloseTest) {
     int error = SMO_open(p_handle, path.c_str());
     BOOST_REQUIRE(error == 0);
 
-    SMO_close(&p_handle);
+    SMO_close(p_handle);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
@@ -117,7 +116,7 @@ struct Fixture {
     }
     ~Fixture() {
         SMO_freeMemory((void*)array);
-        error = SMO_close(&p_handle);
+        error = SMO_close(p_handle);
     }
 
     std::string path;

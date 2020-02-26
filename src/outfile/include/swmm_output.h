@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 int EXPORT_OUT_API SMO_init(SMO_Handle *p_handle);
-int EXPORT_OUT_API SMO_close(SMO_Handle *p_handle);
+int EXPORT_OUT_API SMO_close(SMO_Handle p_handle);
 int EXPORT_OUT_API SMO_open(SMO_Handle p_handle, const char *path);
 int EXPORT_OUT_API SMO_getVersion(SMO_Handle p_handle, int *version);
 int EXPORT_OUT_API SMO_getProjectSize(SMO_Handle p_handle, int **int_out, int *int_dim);
