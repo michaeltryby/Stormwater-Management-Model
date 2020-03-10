@@ -5,3 +5,5 @@
 
 build/
 nrtests/
+
+*_export.h
