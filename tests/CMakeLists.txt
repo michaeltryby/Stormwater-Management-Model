@@ -16,6 +16,7 @@ include_directories (${Boost_INCLUDE_DIRS})
 
 
 add_subdirectory(outfile)
+add_subdirectory(solver)
 
 
 # Setting up tests to run from build tree
