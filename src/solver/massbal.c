@@ -44,22 +44,22 @@
 #include <stdlib.h>
 #include <math.h>
 #include "headers.h"
-#include "swmm5.h"
+#include "swmm5.h" // ?
 
 //-----------------------------------------------------------------------------
-//  Constants   
+//  Constants
 //-----------------------------------------------------------------------------
 static const double MAX_RUNOFF_BALANCE_ERR = 10.0;
 static const double MAX_FLOW_BALANCE_ERR   = 10.0;
 
 //-----------------------------------------------------------------------------
-//  Shared variables   
+//  Shared variables
 //-----------------------------------------------------------------------------
 TRunoffTotals    RunoffTotals;    // overall surface runoff continuity totals
 TLoadingTotals*  LoadingTotals;   // overall WQ washoff continuity totals
-TGwaterTotals    GwaterTotals;    // overall groundwater continuity totals 
-TRoutingTotals   FlowTotals;      // overall routed flow continuity totals 
-TRoutingTotals*  QualTotals;      // overall routed WQ continuity totals 
+TGwaterTotals    GwaterTotals;    // overall groundwater continuity totals
+TRoutingTotals   FlowTotals;      // overall routed flow continuity totals
+TRoutingTotals*  QualTotals;      // overall routed WQ continuity totals
 TRoutingTotals   StepFlowTotals;  // routed flow totals over time step
 TRoutingTotals   OldStepFlowTotals;
 TRoutingTotals*  StepQualTotals;  // routed WQ totals over time step
@@ -95,7 +95,7 @@ double   TotalArea;               // total drainage area (ft2)
 //  massbal_getStepFlowError    (called from routing.c)
 
 //-----------------------------------------------------------------------------
-//  Local Functions   
+//  Local Functions
 //-----------------------------------------------------------------------------
 double massbal_getBuildup(int pollut);
 double massbal_getStorage(char isFinalStorage);
@@ -161,7 +161,7 @@ int massbal_open()
     FlowTotals.exInflow = 0.0;
     FlowTotals.flooding = 0.0;
     FlowTotals.outflow  = 0.0;
-    FlowTotals.evapLoss = 0.0; 
+    FlowTotals.evapLoss = 0.0;
     FlowTotals.seepLoss = 0.0;
     FlowTotals.reacted  = 0.0;
     FlowTotals.initStorage = 0.0;
@@ -223,7 +223,7 @@ int massbal_open()
         QualTotals[j].flooding = 0.0;
         QualTotals[j].outflow  = 0.0;
         QualTotals[j].evapLoss = 0.0;
-        QualTotals[j].seepLoss = 0.0; 
+        QualTotals[j].seepLoss = 0.0;
         QualTotals[j].reacted  = 0.0;
         QualTotals[j].initStorage = massbal_getStoredMass(j);
     }
@@ -311,7 +311,7 @@ void massbal_report()
         if ( massbal_getFlowError() > MAX_FLOW_BALANCE_ERR ||
              RptFlags.continuity == TRUE
            ) report_writeFlowError(&FlowTotals);
-    
+
         if ( Nobjects[POLLUT] > 0 && !IgnoreQuality )
         {
             if ( massbal_getQualError() > MAX_FLOW_BALANCE_ERR ||
@@ -629,16 +629,16 @@ void massbal_updateRoutingTotals(double tStep)
     for ( j = 0; j < Nobjects[NODE]; j++)
     {
         NodeInflow[j] += Node[j].inflow * tStep;
-        if ( Node[j].type == OUTFALL || 
+        if ( Node[j].type == OUTFALL ||
             (Node[j].degree == 0 && Node[j].type != STORAGE) )
         {
             NodeOutflow[j] += Node[j].inflow * tStep;
         }
         else
         {
-            NodeOutflow[j] += Node[j].outflow * tStep; 
-            if ( Node[j].newVolume <= Node[j].fullVolume ) 
-                NodeOutflow[j] += Node[j].overflow * tStep; 
+            NodeOutflow[j] += Node[j].outflow * tStep;
+            if ( Node[j].newVolume <= Node[j].fullVolume )
+                NodeOutflow[j] += Node[j].overflow * tStep;
         }
     }
 }
@@ -664,7 +664,7 @@ double massbal_getStorage(char isFinalStorage)
         totalStorage += nodeStorage;
     }
 
-    // --- skip final link storage for Steady Flow routing 
+    // --- skip final link storage for Steady Flow routing
     if ( isFinalStorage && RouteModel == SF ) return totalStorage;
 
     // --- add on volume stored in links
@@ -772,13 +772,13 @@ double massbal_getLoadingError()
     for (j = 0; j < Nobjects[POLLUT]; j++)
     {
         // --- get final pollutant loading remaining on land surface
-        LoadingTotals[j].finalLoad += massbal_getBuildup(j); 
+        LoadingTotals[j].finalLoad += massbal_getBuildup(j);
 
         // --- compute total load added to study area
         loadIn = LoadingTotals[j].initLoad +
                  LoadingTotals[j].buildup +
                  LoadingTotals[j].deposition;
-    
+
         // --- compute total load removed from study area
         loadOut = LoadingTotals[j].sweeping +
                   LoadingTotals[j].infil +
@@ -985,16 +985,16 @@ double massbal_getQualError()
             cf = cf * UCF(MASS);
             if ( Pollut[p].units == UG ) cf /= 1000.0;
             QualTotals[p].dwInflow     *= cf;
-            QualTotals[p].wwInflow     *= cf; 
-            QualTotals[p].gwInflow     *= cf; 
-            QualTotals[p].iiInflow     *= cf; 
-            QualTotals[p].exInflow     *= cf; 
-            QualTotals[p].flooding     *= cf; 
-            QualTotals[p].outflow      *= cf; 
-            QualTotals[p].reacted      *= cf; 
-            QualTotals[p].seepLoss     *= cf; 
-            QualTotals[p].initStorage  *= cf; 
-            QualTotals[p].finalStorage *= cf; 
+            QualTotals[p].wwInflow     *= cf;
+            QualTotals[p].gwInflow     *= cf;
+            QualTotals[p].iiInflow     *= cf;
+            QualTotals[p].exInflow     *= cf;
+            QualTotals[p].flooding     *= cf;
+            QualTotals[p].outflow      *= cf;
+            QualTotals[p].reacted      *= cf;
+            QualTotals[p].seepLoss     *= cf;
+            QualTotals[p].initStorage  *= cf;
+            QualTotals[p].finalStorage *= cf;
         }
     }
     QualError = maxQualError;

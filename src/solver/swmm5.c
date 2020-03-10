@@ -119,12 +119,14 @@ const double Qcf[6] =                  // Flow Conversion Factors:
 //-----------------------------------------------------------------------------
 //  Shared variables
 //-----------------------------------------------------------------------------
-static int  IsOpenFlag;           // TRUE if a project has been opened
-static int  IsStartedFlag;        // TRUE if a simulation has been started
 static int  SaveResultsFlag;      // TRUE if output to be saved to binary file
 static int  ExceptionCount;       // number of exceptions handled
 static int  DoRunoff;             // TRUE if runoff is computed
 static int  DoRouting;            // TRUE if flow routing is computed
+
+// Exported variables
+int  IsOpenFlag;           // TRUE if a project has been opened
+int  IsStartedFlag;        // TRUE if a simulation has been started
 
 //-----------------------------------------------------------------------------
 //  External API functions (prototyped in swmm5.h)
