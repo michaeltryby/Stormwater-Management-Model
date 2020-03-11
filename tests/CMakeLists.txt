@@ -23,8 +23,17 @@ add_subdirectory(solver)
 set(TEST_BIN_DIRECTORY "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>")
 
 
-# ctest doesn't like tests added in subdirectories so adding them here
+###########  ADD TESTS HERE  ###########
 add_test(NAME test_output
     COMMAND "${TEST_BIN_DIRECTORY}/test_output"
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/outfile/data
+    )
+
+add_test(NAME test_solver
+    COMMAND "${TEST_BIN_DIRECTORY}/test_solver"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/solver/data
+    )
+
+add_test(NAME test_datetime
+    COMMAND "${TEST_BIN_DIRECTORY}/test_datetime"
     )

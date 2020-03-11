@@ -71,14 +71,38 @@ target_include_directories(swmm5
         $<INSTALL_INTERFACE:${INCLUDE_DIST}>
     )
 
-install(TARGETS swmm5 EXPORT swmm5Targets
-    RUNTIME    DESTINATION "${TOOL_DIST}"
-    LIBRARY    DESTINATION "${TOOL_DIST}"
-    ARCHIVE    DESTINATION "${LIBRARY_DIST}"
-    FRAMEWORK  DESTINATION "${TOOL_DIST}"
+
+include(GenerateExportHeader)
+generate_export_header(swmm5
+    BASE_NAME swmm5
+    EXPORT_MACRO_NAME DLLEXPORT
+    EXPORT_FILE_NAME swmm_solver_export.h
+    STATIC_DEFINE SHARED_EXPORTS_BUILT_AS_STATIC
     )
 
-install(FILES ${SWMM_PUBLIC_HEADERS} DESTINATION "${INCLUDE_DIST}")
+file(COPY ${CMAKE_CURRENT_BINARY_DIR}/swmm_solver_export.h
+    DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/include
+    )
+
+
+install(TARGETS swmm5
+    EXPORT swmm5Targets
+        RUNTIME    DESTINATION "${TOOL_DIST}"
+        LIBRARY    DESTINATION "${TOOL_DIST}"
+        ARCHIVE    DESTINATION "${LIBRARY_DIST}"
+        FRAMEWORK  DESTINATION "${TOOL_DIST}"
+    )
+
+install(
+    EXPORT swmm5Targets
+        DESTINATION "${CONFIG_DIST}"
+        FILE swmm5-config.cmake
+    )
+
+install(
+    FILES ${SWMM_PUBLIC_HEADERS}
+        DESTINATION "${INCLUDE_DIST}"
+    )
 
 
 # copy swmm5 to build tree for testing

@@ -1,8 +1,8 @@
 #
 # CMakeLists.txt - CMake configuration file for swmm-solver
 #
-# Created: July 11, 2019
-# Modified: Nov 25, 2019
+# Created:  Jul 11, 2019
+# Modified: Mar 11, 2020
 #
 # Author: Michael E. Tryby
 #         US EPA ORD/CESER
@@ -54,25 +54,6 @@ if(BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
-
-# Create target import scripts so other cmake projects can use swmm libraries
-install(
-    EXPORT
-        swmm5Targets
-    DESTINATION
-        "${CONFIG_DIST}"
-    FILE
-        swmm5-config.cmake
-    )
-
-install(
-    EXPORT
-        swmm-outputTargets
-    DESTINATION
-        "${CONFIG_DIST}"
-    FILE
-        swmm-output-config.cmake
-    )
 
 # Create install rules for vcruntime.dll, msvcp.dll, vcomp.dll etc.
 set(CMAKE_INSTALL_OPENMP_LIBRARIES TRUE)

@@ -44,7 +44,6 @@
 #include <math.h>
 
 #include "headers.h"
-#include "swmm5.h"  // ?
 
 #if defined(_OPENMP)                                                           //(5.1.013)
 #include <omp.h>
@@ -596,7 +595,6 @@ void stats_getNodeStat(int index, TNodeStats *nodeStats)
 // Purpose:  Copies struct and converts units
 //
 {
-
     memcpy(nodeStats, &NodeStats[index], sizeof(TNodeStats));
 
     if (nodeStats != NULL) {

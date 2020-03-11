@@ -1,7 +1,8 @@
 #
 # CMakeLists.txt - CMake configuration file for swmm/outfile
 #
-# Created: July 11, 2019
+# Created:  Jul 11, 2019
+# Modified: Mar 11, 2020
 #
 # Author: Michael E. Tryby
 #         US EPA ORD/CESER
@@ -41,11 +42,18 @@ file(COPY ${CMAKE_CURRENT_BINARY_DIR}/swmm_output_export.h
     )
 
 
-install(TARGETS swmm-output EXPORT swmm-outputTargets
-    RUNTIME    DESTINATION "${TOOL_DIST}"
-    LIBRARY    DESTINATION "${TOOL_DIST}"
-    ARCHIVE    DESTINATION "${LIBRARY_DIST}"
-    FRAMEWORK  DESTINATION "${TOOL_DIST}"
+install(TARGETS swmm-output
+    EXPORT swmm-outputTargets
+        RUNTIME    DESTINATION "${TOOL_DIST}"
+        LIBRARY    DESTINATION "${TOOL_DIST}"
+        ARCHIVE    DESTINATION "${LIBRARY_DIST}"
+        FRAMEWORK  DESTINATION "${TOOL_DIST}"
+    )
+
+install(
+    EXPORT swmm-outputTargets
+        DESTINATION "${CONFIG_DIST}"
+        FILE swmm-output-config.cmake
     )
 
 install(FILES ${SWMM_OUT_PUBLIC_HEADERS} DESTINATION "${INCLUDE_DIST}")

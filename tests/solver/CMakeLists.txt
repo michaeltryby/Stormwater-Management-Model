@@ -1,6 +1,26 @@
 
 
+# Unit tests for swmm solver
+set(solver_test_srcs
+    test_solver.cpp
+    )
 
+add_executable(test_solver
+    ${solver_test_srcs}
+    )
+
+target_link_libraries(test_solver
+    ${Boost_LIBRARIES}
+    swmm5
+    )
+
+set_target_properties(test_solver
+    PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+
+
+
+# Unit tests for datatime conversions
 add_executable(test_datetime
     test_datetime.cpp
     ${CMAKE_SOURCE_DIR}/src/solver/datetime.c
@@ -13,10 +33,4 @@ target_include_directories(test_datetime
 
 target_link_libraries(test_datetime
     ${Boost_LIBRARIES}
-    )
-
-
-
-add_test(NAME test_datetime
-    COMMAND "${TEST_BIN_DIRECTORY}/test_datetime"
     )
