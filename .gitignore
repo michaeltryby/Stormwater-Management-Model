@@ -3,7 +3,8 @@
 .metadata/
 .settings/
 
-build/
+build*/
+
 nrtests/
 
 *_export.h

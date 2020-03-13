@@ -47,7 +47,7 @@ BOOST_FIXTURE_TEST_CASE(NodeStatsTest, FixtureBeforeEnd) {
     error = sm_getNodeStats(index, &test);
     BOOST_CHECK(error == 0);
 
-    BOOST_CHECK_EQUAL(test.maxDepthDate, 36892.405540358799);
+    BOOST_CHECK_EQUAL(test.maxDepthDate, 36892.394508275465);
 }
 
 

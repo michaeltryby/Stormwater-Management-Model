@@ -19,24 +19,33 @@ BOOST_AUTO_TEST_CASE(test_encodeDateTime)
     DateTime t0 = datetime_encodeTime(0,0,0);
     BOOST_CHECK_EQUAL(0.0, t0);
 
-    DateTime t1 = datetime_encodeTime(9,28,0);
-    BOOST_CHECK_EQUAL(0.39444444444444443, t1);
+    DateTime t1 = datetime_encodeTime(9,28,6);
+    BOOST_CHECK_EQUAL(0.39451388888888889, t1);
 }
 
 BOOST_AUTO_TEST_CASE(test_decodeTime)
 {
-    DateTime x, a_date, s_date;
+    DateTime x0, x1;
 
     int hrs, mins, secs;
 
-    s_date = 39892.0;
-    a_date = 39892.0 + 0.39444444444444443;
+    x0 = 0.394508275465;
 
-    x = a_date - s_date;
-
-    datetime_decodeTime(x, &hrs, &mins, &secs);
+    datetime_decodeTime(x0, &hrs, &mins, &secs);
     BOOST_CHECK_EQUAL(9, hrs);
     BOOST_CHECK_EQUAL(28, mins);
+    BOOST_CHECK_EQUAL(6, secs);
+
+    x1 = 0.39451388888888889;
+
+    datetime_decodeTime(x1, &hrs, &mins, &secs);
+    BOOST_CHECK_EQUAL(9, hrs);
+    BOOST_CHECK_EQUAL(28, mins);
+    BOOST_CHECK_EQUAL(6, secs);
+
+    datetime_decodeTime(x1 - x0, &hrs, &mins, &secs);
+    BOOST_CHECK_EQUAL(0, hrs);
+    BOOST_CHECK_EQUAL(0, mins);
     BOOST_CHECK_EQUAL(0, secs);
 }
 
