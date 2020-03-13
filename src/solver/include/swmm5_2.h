@@ -5,9 +5,7 @@
 
 
 #include "swmm5.h"
-
-// Forward declaration
-typedef struct TNodeStats SM_NodeStats;
+#include "swmm_types.h"
 
 
 #ifdef __cplusplus
@@ -15,7 +13,9 @@ extern "C" {
 #endif
 
 
-int DLLEXPORT swmm_getNodeStats(int index, SM_NodeStats *nodeStats);
+int DLLEXPORT sm_getObjectIndex(SM_ObjectType type, const char *id, int *index);
+
+int DLLEXPORT sm_getNodeStats(int index, SM_NodeStats *nodeStats);
 
 
 #ifdef __cplusplus

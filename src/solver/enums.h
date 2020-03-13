@@ -43,27 +43,30 @@
 #define ENUMS_H
 
 
+#include "swmm_types.h"
+
 //-------------------------------------
 // Names of major object types
 //-------------------------------------
- enum ObjectType {
-      GAGE,                            // rain gage
-      SUBCATCH,                        // subcatchment
-      NODE,                            // conveyance system node
-      LINK,                            // conveyance system link
-      POLLUT,                          // pollutant
-      LANDUSE,                         // land use category
-      TIMEPATTERN,                     // dry weather flow time pattern
-      CURVE,                           // generic table of values
-      TSERIES,                         // generic time series of values
-      CONTROL,                         // conveyance system control rules
-      TRANSECT,                        // irregular channel cross-section
-      AQUIFER,                         // groundwater aquifer
-      UNITHYD,                         // RDII unit hydrograph
-      SNOWMELT,                        // snowmelt parameter set
-      SHAPE,                           // custom conduit shape
-      LID,                             // LID treatment units
-      MAX_OBJ_TYPES};
+ // enum ObjectType {
+ //      GAGE,                            // rain gage
+ //      SUBCATCH,                        // subcatchment
+ //      NODE,                            // conveyance system node
+ //      LINK,                            // conveyance system link
+ //      POLLUT,                          // pollutant
+ //      LANDUSE,                         // land use category
+ //      TIMEPATTERN,                     // dry weather flow time pattern
+ //      CURVE,                           // generic table of values
+ //      TSERIES,                         // generic time series of values
+ //      CONTROL,                         // conveyance system control rules
+ //      TRANSECT,                        // irregular channel cross-section
+ //      AQUIFER,                         // groundwater aquifer
+ //      UNITHYD,                         // RDII unit hydrograph
+ //      SNOWMELT,                        // snowmelt parameter set
+ //      SHAPE,                           // custom conduit shape
+ //      LID,                             // LID treatment units
+ //      MAX_OBJ_TYPES};
+typedef enum SM_ObjectType ObjectType;
 
 //-------------------------------------
 // Names of Node sub-types

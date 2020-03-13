@@ -37,7 +37,7 @@
 #define FUNCS_H
 
 
-void     project_open(char *f1, char *f2, char *f3);
+void     project_open(const char* f1, const char* f2, const char* f3);
 void     project_close(void);
 
 void     project_readInput(void);

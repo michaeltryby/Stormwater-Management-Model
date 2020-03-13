@@ -18,23 +18,24 @@
 
 
 typedef enum {
-    CLOSED,
     OPENED,
-    STARTED,
-    FINISHED
-} ToolkitState;
+    STARTED, 
+    STEPPING,
+    COMPLETED,
+    ENDED,
+    CLOSED
+} TSolverState;
 
-ToolkitState State;
+extern TSolverState SolverState;
 
 
-// --- use "C" linkage for C++ programs
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-int  DLLEXPORT   swmm_run(char* f1, char* f2, char* f3);
-int  DLLEXPORT   swmm_open(char* f1, char* f2, char* f3);
+int  DLLEXPORT   swmm_run(const char* f1, const char* f2, const char* f3);
+int  DLLEXPORT   swmm_open(const char* f1, const char* f2, const char* f3);
 int  DLLEXPORT   swmm_start(int saveFlag);
 int  DLLEXPORT   swmm_step(double* elapsedTime);
 int  DLLEXPORT   swmm_end(void);
@@ -47,7 +48,7 @@ int  DLLEXPORT   swmm_getWarnings(void);
 
 
 #ifdef __cplusplus
-}   // matches the linkage specification from above */
+}
 #endif
 
 #endif //SWMM5_H

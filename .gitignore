@@ -7,3 +7,5 @@ build/
 nrtests/
 
 *_export.h
+
+test.*

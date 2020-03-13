@@ -96,6 +96,8 @@
 
 #define  MAX_EXCEPTIONS 100            // max. number of exceptions handled
 
+TSolverState SolverState = CLOSED;
+
 //-----------------------------------------------------------------------------
 //  Unit conversion factors
 //-----------------------------------------------------------------------------
@@ -119,14 +121,13 @@ const double Qcf[6] =                  // Flow Conversion Factors:
 //-----------------------------------------------------------------------------
 //  Shared variables
 //-----------------------------------------------------------------------------
+static int  IsOpenFlag;           // TRUE if a project has been opened
+static int  IsStartedFlag;        // TRUE if a simulation has been started
 static int  SaveResultsFlag;      // TRUE if output to be saved to binary file
 static int  ExceptionCount;       // number of exceptions handled
 static int  DoRunoff;             // TRUE if runoff is computed
 static int  DoRouting;            // TRUE if flow routing is computed
 
-// Exported variables
-int  IsOpenFlag;           // TRUE if a project has been opened
-int  IsStartedFlag;        // TRUE if a simulation has been started
 
 //-----------------------------------------------------------------------------
 //  External API functions (prototyped in swmm5.h)
@@ -153,7 +154,7 @@ static int  xfilter(int xc, char* module, double elapsedTime, long step);
 
 //=============================================================================
 
-int DLLEXPORT  swmm_run(char* f1, char* f2, char* f3)
+int DLLEXPORT  swmm_run(const char* f1, const char* f2, const char* f3)
 //
 //  Input:   f1 = name of input file
 //           f2 = name of report file
@@ -170,6 +171,7 @@ int DLLEXPORT  swmm_run(char* f1, char* f2, char* f3)
     IsOpenFlag = FALSE;                                                        //
     IsStartedFlag = FALSE;                                                     //
     SaveResultsFlag = TRUE;                                                    //
+    SolverState = CLOSED;
 
     // --- open the files & read input data
     ErrorCode = 0;
@@ -213,12 +215,13 @@ int DLLEXPORT  swmm_run(char* f1, char* f2, char* f3)
 
     // --- close the system
     swmm_close();
+
     return error_getCode(ErrorCode);
 }
 
 //=============================================================================
 
-int DLLEXPORT swmm_open(char* f1, char* f2, char* f3)
+int DLLEXPORT swmm_open(const char* f1, const char* f2, const char* f3)
 //
 //  Input:   f1 = name of input file
 //           f2 = name of report file
@@ -244,12 +247,14 @@ int DLLEXPORT swmm_open(char* f1, char* f2, char* f3)
         Warnings = 0;
         IsOpenFlag = FALSE;
         IsStartedFlag = FALSE;
+        SolverState = CLOSED;
         ExceptionCount = 0;
 
         // --- open a SWMM project
         project_open(f1, f2, f3);
         if ( ErrorCode ) return error_getCode(ErrorCode);
         IsOpenFlag = TRUE;
+
         report_writeLogo();
         writecon(FMT06);
 
@@ -272,6 +277,8 @@ int DLLEXPORT swmm_open(char* f1, char* f2, char* f3)
         ErrorCode = ERR_SYSTEM;
     }
 #endif
+
+    SolverState = OPENED;
     return error_getCode(ErrorCode);
 }
 
@@ -360,6 +367,8 @@ int DLLEXPORT swmm_start(int saveResults)
         ErrorCode = ERR_SYSTEM;
     }
 #endif
+
+    SolverState = STARTED;
     return error_getCode(ErrorCode);
 }
 //=============================================================================
@@ -433,10 +442,17 @@ int DLLEXPORT swmm_step(double* elapsedTime)
         if ( NewRoutingTime < TotalDuration )
         {
             ElapsedTime = NewRoutingTime / MSECperDAY;
+            SolverState = STEPPING;
+
         }
 
         // --- otherwise end the simulation
-        else ElapsedTime = 0.0;
+        else
+        {
+            ElapsedTime = 0.0;
+            SolverState = COMPLETED;
+        }
+
         *elapsedTime = ElapsedTime;
     }
 
@@ -447,6 +463,7 @@ int DLLEXPORT swmm_step(double* elapsedTime)
         ErrorCode = ERR_SYSTEM;
     }
 #endif
+
     return error_getCode(ErrorCode);
 }
 
@@ -551,6 +568,8 @@ int DLLEXPORT swmm_end(void)
         hotstart_close();
         IsStartedFlag = FALSE;
     }
+
+    SolverState = ENDED;
     return error_getCode(ErrorCode);
 }
 
@@ -594,6 +613,8 @@ int DLLEXPORT swmm_close()
     }
     IsOpenFlag = FALSE;
     IsStartedFlag = FALSE;
+
+    SolverState = CLOSED;
     return 0;
 }
 

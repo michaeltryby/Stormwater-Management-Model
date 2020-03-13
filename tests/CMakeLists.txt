@@ -11,7 +11,13 @@ else()
     add_definitions(-DBOOST_ALL_DYN_LINK)
 endif()
 
-find_package(Boost COMPONENTS unit_test_framework system thread filesystem)
+find_package(Boost
+    COMPONENTS
+        unit_test_framework
+        system
+        thread
+        filesystem
+    )
 include_directories (${Boost_INCLUDE_DIRS})
 
 
