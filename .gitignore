@@ -4,7 +4,7 @@
 .settings/
 
 build*/
-
+extern/boost*
 nrtests/
 
 *_export.h
