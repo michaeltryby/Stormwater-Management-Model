@@ -516,7 +516,7 @@ int      getDouble(char *s, double *y);       // get double from string
 char*    getTempFileName(char *s);            // get temporary file name
 int      findmatch(char *s, char *keyword[]); // search for matching keyword
 int      match(char *str, char *substr);      // true if substr matches part of str
-int      strcomp(char *s1, char *s2);         // case insensitive string compare
+int      strcomp(const char *s1, const char *s2); // case insensitive string compare
 char*    sstrncpy(char *dest, const char *src,
          size_t maxlen);                      // safe string copy
 void     writecon(char *s);                   // writes string to console

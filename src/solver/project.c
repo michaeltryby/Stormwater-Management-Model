@@ -916,7 +916,7 @@ void setDefaults()
 
 //=============================================================================
 
-void openFiles(char *f1, char *f2, char *f3)
+void openFiles(const char *f1, const char *f2, const char *f3)
 //
 //  Input:   f1 = name of input file
 //           f2 = name of report file

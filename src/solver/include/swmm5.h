@@ -19,7 +19,7 @@
 
 typedef enum {
     OPENED,
-    STARTED, 
+    STARTED,
     STEPPING,
     COMPLETED,
     ENDED,
@@ -34,16 +34,16 @@ extern "C" {
 #endif
 
 
-int  DLLEXPORT   swmm_run(const char* f1, const char* f2, const char* f3);
-int  DLLEXPORT   swmm_open(const char* f1, const char* f2, const char* f3);
+int  DLLEXPORT   swmm_run(const char *f1, const char *f2, const char *f3);
+int  DLLEXPORT   swmm_open(const char *f1, const char *f2, const char *f3);
 int  DLLEXPORT   swmm_start(int saveFlag);
-int  DLLEXPORT   swmm_step(double* elapsedTime);
+int  DLLEXPORT   swmm_step(double *elapsedTime);
 int  DLLEXPORT   swmm_end(void);
 int  DLLEXPORT   swmm_report(void);
-int  DLLEXPORT   swmm_getMassBalErr(float* runoffErr, float* flowErr, float* qualErr);
+int  DLLEXPORT   swmm_getMassBalErr(float *runoffErr, float *flowErr, float *qualErr);
 int  DLLEXPORT   swmm_close(void);
 int  DLLEXPORT   swmm_getVersion(void);
-int  DLLEXPORT   swmm_getError(char* errMsg, int msgLen);
+int  DLLEXPORT   swmm_getError(char *errMsg, int msgLen);
 int  DLLEXPORT   swmm_getWarnings(void);
 
 

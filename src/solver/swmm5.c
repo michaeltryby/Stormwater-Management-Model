@@ -729,7 +729,7 @@ char* sstrncpy(char *dest, const char *src, size_t maxlen)
 
 //=============================================================================
 
-int  strcomp(char *s1, char *s2)
+int  strcomp(const char *s1, const char *s2)
 //
 //  Input:   s1 = a character string
 //           s2 = a character string
