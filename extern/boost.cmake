@@ -9,6 +9,14 @@
 #
 
 
+if(WIN32)
+    set(Boost_USE_STATIC_LIBS       ON)
+else()
+    set(Boost_USE_STATIC_LIBS       OFF)
+    add_definitions(-DBOOST_ALL_DYN_LINK)
+endif()
+
+
 set(BOOST_ROOT ${CMAKE_SOURCE_DIR}/extern/boost_1_67_0)
 
 find_package(Boost 1.67.0

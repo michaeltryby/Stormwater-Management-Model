@@ -4,9 +4,9 @@
 .settings/
 
 build*/
-extern/boost*
+extern/boost_*
 nrtests/
 
 *_export.h
 
-test.*
+test*.*
