@@ -501,7 +501,7 @@ void stats_updateNodeStats(int j, double tStep, DateTime aDate)
 
     // --- update depth statistics
     NodeStats[j].avgDepth += newDepth;
-    if ( newDepth > NodeStats[j].maxDepth )
+    if ( (newDepth - NodeStats[j].maxDepth) > ZERO )
     {
         NodeStats[j].maxDepth = newDepth;
         NodeStats[j].maxDepthDate = aDate;
@@ -542,7 +542,7 @@ void stats_updateNodeStats(int j, double tStep, DateTime aDate)
             Storage[Node[j].subIndex].exfilLoss;
 
         newVolume = MIN(newVolume, Node[j].fullVolume);
-        if ( newVolume > StorageStats[k].maxVol )
+        if ( (newVolume - StorageStats[k].maxVol) > ZERO )
         {
             StorageStats[k].maxVol = newVolume;
             StorageStats[k].maxVolDate = aDate;
@@ -573,14 +573,14 @@ void stats_updateNodeStats(int j, double tStep, DateTime aDate)
                                  0.5 * tStep );
     if ( fabs(Node[j].newLatFlow) > fabs(NodeStats[j].maxLatFlow) )
         NodeStats[j].maxLatFlow = Node[j].newLatFlow;
-    if ( Node[j].inflow > NodeStats[j].maxInflow )
+    if ( (Node[j].inflow - NodeStats[j].maxInflow) > ZERO )
     {
         NodeStats[j].maxInflow = Node[j].inflow;
         NodeStats[j].maxInflowDate = aDate;
     }
 
     // --- update overflow statistics
-    if ( Node[j].overflow > NodeStats[j].maxOverflow )
+    if ( (Node[j].overflow - NodeStats[j].maxOverflow) > ZERO )
     {
         NodeStats[j].maxOverflow = Node[j].overflow;
         NodeStats[j].maxOverflowDate = aDate;
@@ -642,7 +642,7 @@ void  stats_updateLinkStats(int j, double tStep, DateTime aDate)
     // --- update max. flow
     dq = Link[j].newFlow - Link[j].oldFlow;
     q = fabs(Link[j].newFlow);
-    if ( q > LinkStats[j].maxFlow )
+    if ( (q - LinkStats[j].maxFlow) > ZERO )
     {
         LinkStats[j].maxFlow = q;
         LinkStats[j].maxFlowDate = aDate;
@@ -656,7 +656,7 @@ void  stats_updateLinkStats(int j, double tStep, DateTime aDate)
     }
 
     // --- update max. depth
-    if ( Link[j].newDepth > LinkStats[j].maxDepth )
+    if ( (Link[j].newDepth - LinkStats[j].maxDepth) > ZERO )
     {
         LinkStats[j].maxDepth = Link[j].newDepth;
     }

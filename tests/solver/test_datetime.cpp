@@ -21,6 +21,12 @@ BOOST_AUTO_TEST_CASE(test_encodeDateTime)
 
     DateTime t1 = datetime_encodeTime(9,28,6);
     BOOST_CHECK_EQUAL(0.39451388888888889, t1);
+
+    DateTime t2 = datetime_encodeTime(9,42,0);
+    BOOST_CHECK_EQUAL(0.40416666666666667, t2);
+
+    DateTime t3 = datetime_encodeTime(9,50,0);
+    BOOST_CHECK_EQUAL(0.40972222222222221, t3);
 }
 
 BOOST_AUTO_TEST_CASE(test_decodeTime)

@@ -10,9 +10,20 @@
 #include "swmm5_2.h"
 
 
-#define DATA_PATH_INP "./example1.inp"
+#define DATA_PATH_INP "./example3.inp"
 #define DATA_PATH_RPT "./test.rpt"
 #define DATA_PATH_OUT "./test.out"
+
+
+
+struct FixtureOpenClose{
+    FixtureOpenClose() {
+        swmm_open(DATA_PATH_INP, DATA_PATH_RPT, DATA_PATH_OUT);
+    }
+    ~FixtureOpenClose() {
+        swmm_close();
+    }
+};
 
 
 struct FixtureBeforeEnd{

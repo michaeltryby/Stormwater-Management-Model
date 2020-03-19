@@ -26,6 +26,18 @@ typedef enum {
 } SM_ObjectType;
 
 
+typedef enum {
+    TOTALINFLOW,    /**< Total Inflow */
+    TOTALOUTFLOW,   /**< Total Outflow */
+    LOSSES,         /**< Node Losses */
+    NODEVOL,        /**< Stored Volume */
+    NODEFLOOD,      /**< Flooding Rate */
+    NODEDEPTH,      /**< Node Depth */
+    NODEHEAD,       /**< Node Head */
+    LATINFLOW       /**< Lateral Inflow Rate */
+} SM_NodeResult;
+
+
 typedef double DateTime;
 
 typedef struct {
