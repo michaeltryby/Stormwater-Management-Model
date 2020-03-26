@@ -926,7 +926,7 @@ int EXPORT_OUT_API SMO_getSystemResult(SMO_Handle p_handle, int periodIndex,
 //
 {
     int    errorcode = 0;
-    float  *temp;
+    float  *temp = NULL;
     F_OFF  offset;
     data_t *p_data;
 
@@ -936,8 +936,8 @@ int EXPORT_OUT_API SMO_getSystemResult(SMO_Handle p_handle, int periodIndex,
         errorcode = -1;
     else if (periodIndex < 0 || periodIndex >= p_data->Nperiods)
         errorcode = 422;
-    else if
-        MEMCHECK(temp = newFloatArray(p_data->SysVars)) errorcode = 411;
+    else if MEMCHECK(temp = newFloatArray(p_data->SysVars))
+        errorcode = 411;
     {
         // calculate byte offset to start time for series
         offset = p_data->ResultsPos + (periodIndex)*p_data->BytesPerPeriod +

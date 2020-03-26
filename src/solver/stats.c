@@ -496,7 +496,7 @@ void stats_updateNodeStats(int j, double tStep, DateTime aDate)
     int    k, p;
     double newVolume = Node[j].newVolume;
     double newDepth = Node[j].newDepth;
-    double yCrown = Node[j].crownElev - Node[j].invertElev;
+//    double yCrown = Node[j].crownElev - Node[j].invertElev;
     int    canPond = (AllowPonding && Node[j].pondedArea > 0.0);
 
     // --- update depth statistics

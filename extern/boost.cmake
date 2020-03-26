@@ -17,9 +17,10 @@ else()
 endif()
 
 
-set(BOOST_ROOT ${CMAKE_SOURCE_DIR}/extern/boost_1_67_0)
+#set(BOOST_ROOT ${CMAKE_SOURCE_DIR}/extern/boost_1_67_0)
+#set(BOOST_ROOT ${CMAKE_SOURCE_DIR}/extern/boost@1.72)
 
-find_package(Boost 1.67.0
+find_package(Boost 1.72.0
     COMPONENTS
         unit_test_framework
     )

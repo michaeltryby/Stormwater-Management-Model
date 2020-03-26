@@ -519,7 +519,7 @@ int      match(char *str, char *substr);      // true if substr matches part of 
 int      strcomp(const char *s1, const char *s2); // case insensitive string compare
 char*    sstrncpy(char *dest, const char *src,
          size_t maxlen);                      // safe string copy
-void     writecon(char *s);                   // writes string to console
+void     writecon(const char *s);                   // writes string to console
 DateTime getDateTime(double elapsedMsec);     // convert elapsed time to date
 void     getElapsedTime(DateTime aDate,       // convert elapsed date
          int* days, int* hrs, int* mins);

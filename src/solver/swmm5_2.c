@@ -54,7 +54,8 @@ void DLLEXPORT sm_getDateTime(double elapsedTime, DateTime *eDate)
 
 int DLLEXPORT sm_getObjectIndex(SM_ObjectType type, const char *id, int *index)
 {
-    int idx, errorcode = 0;
+    int idx = -1,
+        errorcode = 0;
 
     if (SolverState == CLOSED)
         errorcode = ERR_API_INPUTNOTOPEN;
@@ -130,20 +131,16 @@ int DLLEXPORT sm_getNodeStats(int index, SM_NodeStats *nodeStats)
 {
     int errorcode = 0;
 
-    switch(SolverState)
-    {
-    case COMPLETED:
+    if (SolverState == CLOSED)
+        errorcode = ERR_API_INPUTNOTOPEN;
+    
+    else if (SolverState == STEPPING)
+        errorcode = ERR_API_SIM_NRUNNING;
+    
+    else if (SolverState == COMPLETED) {
         if (index < 0 || index >= Nobjects[NODE])
             errorcode = ERR_API_OBJECT_INDEX;
-        break;
-    case CLOSED:
-        errorcode = ERR_API_INPUTNOTOPEN;
-        break;
-    case STEPPING:
-        errorcode = ERR_API_SIM_NRUNNING;
-        break;
     }
-
     if (!errorcode)
         stats_getNodeStat(index, (TNodeStats *)nodeStats);
 

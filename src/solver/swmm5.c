@@ -832,14 +832,14 @@ DateTime getDateTime(double elapsedMsec)
 
 //=============================================================================
 
-void  writecon(char *s)
+void  writecon(const char *s)
 //
 //  Input:   s = a character string
 //  Output:  none
 //  Purpose: writes string of characters to the console.
 //
 {
-    fprintf(stdout,s);
+    fprintf(stdout, "%s", s);
     fflush(stdout);
 }
 

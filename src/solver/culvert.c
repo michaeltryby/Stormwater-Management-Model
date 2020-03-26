@@ -164,8 +164,8 @@ static double getTransitionFlow(int code, double h, double h1, double h2,
 static double getForm1Flow(double h, TCulvert* culvert);
 static double form1Eqn(double yc, void* p);
 
-static void report_CulvertControl(int j, double q0, double q, int condition,
-	        double yRatio);                                                  //for debugging only
+//static void report_CulvertControl(int j, double q0, double q, int condition,
+//	        double yRatio);                                                  //for debugging only
 
 
 //=============================================================================
@@ -392,18 +392,18 @@ double form1Eqn(double yc, void* p)
 
 //=============================================================================
 
-void report_CulvertControl(int j, double q0, double q, int condition, double yRatio)
+//void report_CulvertControl(int j, double q0, double q, int condition, double yRatio)
 //
 //  Used for debugging only
 //
-{
-    static   char* conditionTxt[] = {"transition", "unsubmerged", "submerged"};
-    char     theDate[12];
-    char     theTime[9];
-	DateTime aDate = getDateTime(NewRoutingTime);
-    datetime_dateToStr(aDate, theDate);
-    datetime_timeToStr(aDate, theTime);
-    fprintf(Frpt.file,
-            "\n  %11s: %8s Culvert %s flow reduced from %.3f to %.3f cfs for %s flow (%.2f).",
-            theDate, theTime, Link[j].ID, q0, q, conditionTxt[condition], yRatio);
-}
+//{
+//    static   char* conditionTxt[] = {"transition", "unsubmerged", "submerged"};
+//    char     theDate[12];
+//    char     theTime[9];
+//	DateTime aDate = getDateTime(NewRoutingTime);
+//    datetime_dateToStr(aDate, theDate);
+//    datetime_timeToStr(aDate, theTime);
+//    fprintf(Frpt.file,
+//            "\n  %11s: %8s Culvert %s flow reduced from %.3f to %.3f cfs for %s flow (%.2f).",
+//            theDate, theTime, Link[j].ID, q0, q, conditionTxt[condition], yRatio);
+//}

@@ -79,10 +79,11 @@ BOOST_AUTO_TEST_CASE(ObjectIndexTest) {
 }
 
 BOOST_FIXTURE_TEST_CASE(TimeSeriesTest, FixtureOpenClose) {
-    double elapsedTime, depth;
-    DateTime eDateTime;
-    DateTime start = 36892.40416666666666667;
-    DateTime stop = 36892.40972222222222221;
+    double elapsedTime;  
+    //depth;
+    //DateTime eDateTime;
+    //DateTime start = 36892.40416666666666667;
+    //DateTime stop = 36892.40972222222222221;
 
     swmm_start(true);
 
@@ -109,11 +110,8 @@ BOOST_FIXTURE_TEST_CASE(NodeStatsTest, FixtureBeforeEnd) {
     error = sm_getNodeStats(index, &test);
     BOOST_CHECK(error == 0);
 
-    BOOST_CHECK_CLOSE(test.maxRptDepth, 0.56763321161270142, 0.01);
-    BOOST_CHECK_EQUAL(test.maxDepthDate, 36892.394508275465);
-    //0.14729800820350647  0 9:49  36892.409407928244 32 bit
-    //0.14729800820350647  0 9:43  36892.405540358799 64 bit
-    //0.1472980153780030
+    BOOST_CHECK_CLOSE(test.maxRptDepth, 0.14729800820350647, 0.01);
+    BOOST_CHECK_EQUAL(test.maxDepthDate, 36892.390133483794);
 }
 
 
