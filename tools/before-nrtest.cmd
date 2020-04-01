@@ -46,6 +46,12 @@ where 7z > nul
 if %ERRORLEVEL% neq 0 ( echo "ERROR: 7zip not installed" & exit /B 1 )
 
 
+:: check env variables and apply defaults
+if not defined PROJECT ( echo "ERROR: PROJECT must be defined" & exit /B 1 )
+if not defined BUILD_HOME ( echo "ERROR: BUILD_HOME must be defined" & exit /B 1 )
+if not defined PLATFORM ( echo "ERROR: PLATFORM must be defined" & exit /B 1 )
+
+
 :: set URL to github repo with test files
 set "NRTESTS_URL=https://github.com/SWMM-Project/%PROJECT%-nrtestsuite"
 
@@ -53,12 +59,6 @@ set "NRTESTS_URL=https://github.com/SWMM-Project/%PROJECT%-nrtestsuite"
 :: if release tag isn't provided latest tag will be retrieved
 if [%1] == [] (set "RELEASE_TAG="
 ) else (set "RELEASE_TAG=%~1")
-
-
-:: check env variables and apply defaults
-if not defined PROJECT ( echo "ERROR: PROJECT must be defined" & exit /B 1 )
-if not defined BUILD_HOME ( echo "ERROR: BUILD_HOME must be defined" & exit /B 1 )
-if not defined PLATFORM ( echo "ERROR: PLATFORM must be defined" & exit /B 1 )
 
 
 echo INFO: Staging files for regression testing

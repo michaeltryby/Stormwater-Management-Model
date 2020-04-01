@@ -89,8 +89,6 @@ set REF_OUTPUT_PATH=benchmark\%PROJECT%-%REF_BUILD_ID%
 set RTOL_VALUE=0.01
 set ATOL_VALUE=1.E-6
 
-:: change current directory to test suite
-::cd %TEST_HOME%
 
 :: if present clean test benchmark results
 if exist %TEST_OUTPUT_PATH% (
