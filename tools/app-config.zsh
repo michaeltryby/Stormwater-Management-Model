@@ -24,11 +24,11 @@
 
 # check requirements
 where git &> /dev/null
-[[ ! $? ]] && { echo "ERROR: git not installed"; exit 1 }
+[[ ! $? ]] && { echo "ERROR: git not installed"; return 1 }
 
 # check that env variables are set
-[[ ! -v PROJECT ]] && { echo "ERROR: PROJECT must be defined"; exit 1 }
-[[ ! -v PLATFORM ]] && { echo "ERROR: PLATFORM must be defined"; exit 1 }
+[[ ! -v PROJECT ]] && { echo "ERROR: PROJECT must be defined"; return 1 }
+[[ ! -v PLATFORM ]] && { echo "ERROR: PLATFORM must be defined"; return 1 }
 
 
 # swmm target created by the cmake build script
@@ -46,7 +46,7 @@ fi
 
 # determine version
 VERSION=$( git rev-parse --short HEAD )
-[[ ! -v VERSION ]] && { echo "ERROR: VERSION must be determined"; exit 1 }
+[[ ! -v VERSION ]] && { echo "ERROR: VERSION must be determined"; return 1 }
 
 cat<<EOF
 {

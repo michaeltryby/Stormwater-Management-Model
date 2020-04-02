@@ -25,11 +25,11 @@
 
 
 # check that env variables are set
-[[ ! -v PROJECT ]] && { echo "ERROR: PROJECT must be defined"; exit 1 }
-[[ ! -v BUILD_HOME ]] && { echo "ERROR: BUILD_HOME must be defined"; exit 1 }
-[[ ! -v TEST_HOME ]] && { echo "ERROR: TEST_HOME must be defined"; exit 1 }
-[[ ! -v PLATFORM ]] && { echo "ERROR: PLATFORM must be defined"; exit 1 }
-[[ ! -v REF_BUILD_ID ]] && { echo "ERROR: REF_BUILD_ID must be defined"; exit 1 }
+[[ ! -v PROJECT ]] && { echo "ERROR: PROJECT must be defined"; return 1 }
+[[ ! -v BUILD_HOME ]] && { echo "ERROR: BUILD_HOME must be defined"; return 1 }
+[[ ! -v TEST_HOME ]] && { echo "ERROR: TEST_HOME must be defined"; return 1 }
+[[ ! -v PLATFORM ]] && { echo "ERROR: PLATFORM must be defined"; return 1 }
+[[ ! -v REF_BUILD_ID ]] && { echo "ERROR: REF_BUILD_ID must be defined"; return 1 }
 
 
 # process optional arguments

@@ -9,9 +9,9 @@ export TEST_HOME="nrtests"
 
 
 # check that env variables are set
-[[ ! -v PROJECT ]] && { echo "ERROR: PROJECT must be defined"; exit 1 }
-[[ ! -v BUILD_HOME ]] && { echo "ERROR: BUILD_HOME must be defined"; exit 1 }
-[[ ! -v PLATFORM ]] && { echo "ERROR: PLATFORM must be defined"; exit 1 }
+[[ ! -v PROJECT ]] && { echo "ERROR: PROJECT must be defined"; return 1 }
+[[ ! -v BUILD_HOME ]] && { echo "ERROR: BUILD_HOME must be defined"; return 1 }
+[[ ! -v PLATFORM ]] && { echo "ERROR: PLATFORM must be defined"; return 1 }
 
 
 # determine project directory
@@ -40,7 +40,7 @@ then
   TESTFILES_URL="${NRTESTS_URL}/archive/${RELEASE_TAG}.zip"
   BENCHFILES_URL="${NRTESTS_URL}/releases/download/${RELEASE_TAG}/benchmark-${PLATFORM}.zip"
 else
-    echo "ERROR: tag %RELEASE_TAG% is invalid" ; exit 1
+    echo "ERROR: tag %RELEASE_TAG% is invalid" ; return 1
 fi
 
 
@@ -71,7 +71,7 @@ tar xzf benchmarks.tar.gz -C benchmark
 
 
 # determine REF_BUILD_ID from manifest file
-
+export REF_BUILD_ID="local"
 
 # return user to current dir
 cd ${CUR_DIR}
