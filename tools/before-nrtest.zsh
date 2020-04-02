@@ -37,8 +37,8 @@ fi
 # build URLs for test and benchmark files
 if [[ -v RELEASE_TAG ]]
 then
-  TESTFILES_URL="${NRTESTS_URL}/archive/${RELEASE_TAG}.zip"
-  BENCHFILES_URL="${NRTESTS_URL}/releases/download/${RELEASE_TAG}/benchmark-${PLATFORM}.zip"
+  TESTFILES_URL="${NRTESTS_URL}/archive/${RELEASE_TAG}.tar.gz"
+  BENCHFILES_URL="${NRTESTS_URL}/releases/download/${RELEASE_TAG}/benchmark-${PLATFORM}.tar.gz"
 else
     echo "ERROR: tag %RELEASE_TAG% is invalid" ; return 1
 fi
@@ -63,7 +63,7 @@ curl -fsSL -o benchmarks.tar.gz ${BENCHFILES_URL}
 
 # extract tests and setup symlink
 tar xzf nrtestfiles.tar.gz
-ln -s ./${PROJECT}-nrtestsuite-${RELEASE_TAG}/public tests
+ln -s ./${PROJECT}-nrtestsuite-${RELEASE_TAG:1}/public tests
 
 # create benchmark dir and extract benchmarks
 mkdir benchmark

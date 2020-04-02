@@ -54,25 +54,25 @@ cd ${SCRIPT_HOME}/..
 # change current directory to test suite
 cd ${TEST_HOME}
 
-# check if file config file exists
+# check if app config file exists
 if [ ! -a "./apps/${PROJECT}-${SUT_BUILD_ID}.json" ]; then
     mkdir "apps"
     ${SCRIPT_HOME}/app-config.zsh > "./apps/${PROJECT}-${SUT_BUILD_ID}.json"
 fi
 
 # recursively build test list
-TESTS=$( find . -mindepth 1 -type d -follow )
+TESTS=$( find ./tests -mindepth 1 -type d -follow | paste -sd " " - )
 
 # build nrtest execute command
-NRTEST_EXECUTE_CMD=python3 nrtest execute
-TEST_APP_PATH=apps/${PROJECT}-${SUT_BUILD_ID}.json
-TEST_OUTPUT_PATH=benchmark/${PROJECT}-${SUT_BUILD_ID}
+NRTEST_EXECUTE_CMD="python3 nrtest execute"
+TEST_APP_PATH="./apps/${PROJECT}-${SUT_BUILD_ID}.json"
+TEST_OUTPUT_PATH="./benchmark/${PROJECT}-${SUT_BUILD_ID}"
 
 # build nrtest compare command
-NRTEST_COMPARE_CMD=python3 nrtest compare
-REF_OUTPUT_PATH=benchmark/${PROJECT}-${REF_BUILD_ID}
-RTOL_VALUE=0.01
-ATOL_VALUE=1.E-6
+NRTEST_COMPARE_CMD="python3 nrtest compare"
+REF_OUTPUT_PATH="benchmark/${PROJECT}-${REF_BUILD_ID}"
+RTOL_VALUE="0.01"
+ATOL_VALUE="1.E-6"
 
 
 # if present clean test benchmark results
