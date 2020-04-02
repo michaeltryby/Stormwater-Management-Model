@@ -9,10 +9,10 @@ export TEST_HOME="nrtests"
 
 
 # check that env variables are set
-[[ ! -v PROJECT ]] && { echo "ERROR: PROJECT must be defined"; return 1 }
-[[ ! -v BUILD_HOME ]] && { echo "ERROR: BUILD_HOME must be defined"; return 1 }
-[[ ! -v PLATFORM ]] && { echo "ERROR: PLATFORM must be defined"; return 1 }
-
+REQUIRED_VARS=('PROJECT' 'BUILD_HOME' 'PLATFORM')
+for i in ${REQUIRED_VARS}; do
+    [[ -v "${${(P)i}}" ]] && { echo "ERROR: $i must be defined"; return 1 }
+done
 
 # determine project directory
 CUR_DIR=${PWD}

@@ -25,11 +25,10 @@
 
 
 # check that env variables are set
-[[ ! -v PROJECT ]] && { echo "ERROR: PROJECT must be defined"; return 1 }
-[[ ! -v BUILD_HOME ]] && { echo "ERROR: BUILD_HOME must be defined"; return 1 }
-[[ ! -v TEST_HOME ]] && { echo "ERROR: TEST_HOME must be defined"; return 1 }
-[[ ! -v PLATFORM ]] && { echo "ERROR: PLATFORM must be defined"; return 1 }
-[[ ! -v REF_BUILD_ID ]] && { echo "ERROR: REF_BUILD_ID must be defined"; return 1 }
+REQUIRED_VARS=('PROJECT' 'BUILD_HOME' 'TEST_HOME' 'PLATFORM' 'REF_BUILD_ID')
+for i in ${REQUIRED_VARS}; do
+    [[ -v "${${(P)i}}" ]] && { echo "ERROR: $i must be defined"; return 1 }
+done
 
 
 # process optional arguments
@@ -61,7 +60,7 @@ if [[ ! -a "./apps/${PROJECT}-${SUT_BUILD_ID}.json" ]]
 then
     mkdir -p "apps"
     ${SCRIPT_HOME}/app-config.zsh "${PROJ_DIR}/${BUILD_HOME}/bin" \
-    ${PLATFORM} ${SUT_BUILD_ID} ${SUT_VERSION} > "./apps/${PROJECT}-${SUT_BUILD_ID}.json"
+    ${SUT_BUILD_ID} ${SUT_VERSION} > "./apps/${PROJECT}-${SUT_BUILD_ID}.json"
 fi
 
 # build list of directories contaiing tests
