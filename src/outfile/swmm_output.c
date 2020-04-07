@@ -124,6 +124,7 @@ int EXPORT_OUT_API SMO_init(SMO_Handle *p_handle)
 }
 
 int EXPORT_OUT_API SMO_close(SMO_Handle p_handle)
+
 //
 //   Purpose: Clean up after and close Output API
 //
@@ -348,7 +349,6 @@ int EXPORT_OUT_API SMO_getUnits(SMO_Handle p_handle, int **unitFlag, int *length
 
     return set_error(p_data->error_handle, errorcode);
 }
-
 
 int EXPORT_OUT_API SMO_getStartDate(SMO_Handle p_handle, double *date)
 //

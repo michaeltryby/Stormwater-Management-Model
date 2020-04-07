@@ -1,8 +1,8 @@
 #
 # CMakeLists.txt - CMake configuration file for swmm-solver/library
 #
-# Created: July 11, 2019
-# Modified: Nov 25, 2019
+# Created: Jul 11, 2019
+# Updated: Mar  5, 2020
 #
 # Author: Michael E. Tryby
 #         US EPA ORD/CESER
@@ -22,9 +22,41 @@ file(GLOB
         RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.c *.h
     )
 
-add_library(swmm5
-    SHARED
-        ${SWMM_SOURCES}
+if(BUILD_DEF)
+    # Build library with def file interface for backward compatibility
+    set_source_files_properties(${PROJECT_SOURCE_DIR}/bindings/swmm5.def
+        PROPERTIES_HEADER_FILE_ONLY TRUE
+    )
+
+    add_library(swmm5
+        SHARED
+            ${SWMM_SOURCES}
+            ${PROJECT_SOURCE_DIR/bindings/swmm5.def}
+        )
+
+else()
+
+    add_library(swmm5
+        SHARED
+            ${SWMM_SOURCES}
+        )
+
+endif()
+
+target_compile_options(swmm5
+    PUBLIC
+        "$<$<C_COMPILER_ID:MSVC>:"
+            "$<$<CONFIG:Release>:/GL>"
+            "$<$<CONFIG:Release>:/fp:fast>"
+            "$<$<CONFIG:Release>:/Zi>"
+        ">"
+    )
+
+target_link_options(swmm5
+    PUBLIC
+        "$<$<C_COMPILER_ID:MSVC>:"
+            "$<$<CONFIG:Release>:/LTCG:incremental>"
+        ">"
     )
 
 target_link_libraries(swmm5
@@ -39,14 +71,38 @@ target_include_directories(swmm5
         $<INSTALL_INTERFACE:${INCLUDE_DIST}>
     )
 
-install(TARGETS swmm5 EXPORT swmm5Targets
-    RUNTIME    DESTINATION "${TOOL_DIST}"
-    LIBRARY    DESTINATION "${TOOL_DIST}"
-    ARCHIVE    DESTINATION "${LIBRARY_DIST}"
-    FRAMEWORK  DESTINATION "${TOOL_DIST}"
+
+include(GenerateExportHeader)
+generate_export_header(swmm5
+    BASE_NAME swmm5
+    EXPORT_MACRO_NAME DLLEXPORT
+    EXPORT_FILE_NAME swmm_solver_export.h
+    STATIC_DEFINE SHARED_EXPORTS_BUILT_AS_STATIC
     )
 
-install(FILES ${SWMM_PUBLIC_HEADERS} DESTINATION "${INCLUDE_DIST}")
+file(COPY ${CMAKE_CURRENT_BINARY_DIR}/swmm_solver_export.h
+    DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/include
+    )
+
+
+install(TARGETS swmm5
+    EXPORT swmm5Targets
+        RUNTIME    DESTINATION "${TOOL_DIST}"
+        LIBRARY    DESTINATION "${TOOL_DIST}"
+        ARCHIVE    DESTINATION "${LIBRARY_DIST}"
+        FRAMEWORK  DESTINATION "${TOOL_DIST}"
+    )
+
+install(
+    EXPORT swmm5Targets
+        DESTINATION "${CONFIG_DIST}"
+        FILE swmm5-config.cmake
+    )
+
+install(
+    FILES ${SWMM_PUBLIC_HEADERS}
+        DESTINATION "${INCLUDE_DIST}"
+    )
 
 
 # copy swmm5 to build tree for testing

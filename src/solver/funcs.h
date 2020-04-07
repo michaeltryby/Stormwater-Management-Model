@@ -8,6 +8,7 @@
 //             04/02/15  (Build 5.1.008)
 //             08/05/15  (Build 5.1.010)
 //             05/10/18  (Build 5.1.013)
+//             03/01/20  (Build 5.1.014)
 //   Author:   L. Rossman (EPA)
 //             M. Tryby (EPA)
 //
@@ -27,8 +28,16 @@
 //   Build 5.1.013:
 //   - Additional arguments added to function stats_updateSubcatchStats.
 //
+//   Build 5.1.014:
+//   - Arguments to link_getLossRate function changed.
+//
 //-----------------------------------------------------------------------------
-void     project_open(char *f1, char *f2, char *f3);
+
+#ifndef FUNCS_H
+#define FUNCS_H
+
+
+void     project_open(const char* f1, const char* f2, const char* f3);
 void     project_close(void);
 
 void     project_readInput(void);
@@ -82,7 +91,7 @@ void    report_writeSysStats(TSysStats* sysStats);
 void    report_writeErrorMsg(int code, char* msg);
 void    report_writeErrorCode(void);
 void    report_writeInputErrorMsg(int k, int sect, char* line, long lineCount);
-void    report_writeWarningMsg(char* msg, char* id); 
+void    report_writeWarningMsg(char* msg, char* id);
 void    report_writeTseriesErrorMsg(int code, TTable *tseries);
 
 void    inputrpt_writeInput(void);
@@ -271,7 +280,7 @@ void    stats_report(void);
 void    stats_updateCriticalTimeCount(int node, int link);
 void    stats_updateFlowStats(double tStep, DateTime aDate, int stepCount,
         int steadyState);
-void    stats_updateSubcatchStats(int subcatch, double rainVol, 
+void    stats_updateSubcatchStats(int subcatch, double rainVol,
         double runonVol, double evapVol, double infilVol,
         double impervVol, double pervVol, double runoffVol, double runoff);    //(5.1.013)
 void    stats_updateGwaterStats(int j, double infil, double evap,
@@ -333,9 +342,7 @@ void    node_initState(int node);
 void    node_initInflow(int node, double tStep);
 void    node_setOldHydState(int node);
 void    node_setOldQualState(int node);
-
 void    node_setOutletDepth(int node, double yNorm, double yCrit, double z);
-void    node_setDividerCutoff(int node, int link);
 
 double  node_getSurfArea(int node, double depth);
 double  node_getDepth(int node, double volume);
@@ -354,12 +361,12 @@ void    node_getResults(int node, double wt, float x[]);
 int     inflow_readExtInflow(char* tok[], int ntoks);
 int     inflow_readDwfInflow(char* tok[], int ntoks);
 int     inflow_readDwfPattern(char* tok[], int ntoks);
-int     inflow_setExtInflow(int j, int param, int type, 
-						int tSeries, int basePat, double cf, 
-						double baseline, double sf);
-int     inflow_validate(int param, int type, int tSeries, 
-						int basePat, double *cf);					
-						
+int     inflow_setExtInflow(int j, int param, int type,
+        int tSeries, int basePat, double cf,
+        double baseline, double sf);
+int     inflow_validate(int param, int type, int tSeries,
+        int basePat, double *cf);
+
 void    inflow_initDwfInflow(TDwfInflow* inflow);
 void    inflow_initDwfPattern(int pattern);
 
@@ -412,7 +419,7 @@ double  link_getYnorm(int link, double q);
 double  link_getVelocity(int link, double q, double y);
 double  link_getFroude(int link, double v, double y);
 double  link_getPower(int link);
-double  link_getLossRate(int link, double q, double tStep);
+double  link_getLossRate(int link, double q);                                  //(5.1.014)
 char    link_getFullState(double a1, double a2, double aFull);
 
 void    link_getResults(int link, double wt, float x[]);
@@ -469,7 +476,7 @@ int     shape_validate(TShape *shape, TTable *curve);
 int     controls_create(int n);
 void    controls_delete(void);
 int     controls_addRuleClause(int rule, int keyword, char* Tok[], int nTokens);
-int     controls_evaluate(DateTime currentTime, DateTime elapsedTime, 
+int     controls_evaluate(DateTime currentTime, DateTime elapsedTime,
         double tStep);
 
 //-----------------------------------------------------------------------------
@@ -509,10 +516,13 @@ int      getDouble(char *s, double *y);       // get double from string
 char*    getTempFileName(char *s);            // get temporary file name
 int      findmatch(char *s, char *keyword[]); // search for matching keyword
 int      match(char *str, char *substr);      // true if substr matches part of str
-int      strcomp(char *s1, char *s2);         // case insensitive string compare
+int      strcomp(const char *s1, const char *s2); // case insensitive string compare
 char*    sstrncpy(char *dest, const char *src,
          size_t maxlen);                      // safe string copy
-void     writecon(char *s);                   // writes string to console
+void     writecon(const char *s);                   // writes string to console
 DateTime getDateTime(double elapsedMsec);     // convert elapsed time to date
 void     getElapsedTime(DateTime aDate,       // convert elapsed date
          int* days, int* hrs, int* mins);
+
+
+#endif //FUNCS_H

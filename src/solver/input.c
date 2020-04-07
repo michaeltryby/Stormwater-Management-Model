@@ -774,13 +774,13 @@ int  match(char *str, char *substr)
     if (!substr[0]) return(0);
 
     // --- skip leading blanks of str
-    for (i = 0; str[i]; i++)
+    for (i = 0, j = 0; str[i]; i++)
     {
-        if (str[i] != ' ') break;
+        if (str[i] != ' ') j = i; break;
     }
 
     // --- check if substr matches remainder of str
-    for (i = i,j = 0; substr[j]; i++,j++)
+    for (i = j, j = 0; substr[j]; i++,j++)
     {
         if (!str[i] || UCHAR(str[i]) != UCHAR(substr[j])) return(0);
     }

@@ -41,8 +41,8 @@
 //-----------------------------------------------------------------------------
 static double landuse_getBuildupDays(int landuse, int pollut, double buildup);
 static double landuse_getBuildupMass(int landuse, int pollut, double days);
-static double landuse_getRunoffLoad(int landuse, int pollut, double area,
-              TLandFactor landFactor[], double runoff, double tStep);
+//static double landuse_getRunoffLoad(int landuse, int pollut, double area,
+//              TLandFactor landFactor[], double runoff, double tStep);
 static double landuse_getWashoffQual(int landuse, int pollut, double buildup,
               double runoff, double area);
 static double landuse_getExternalBuildup(int i, int p, double buildup,

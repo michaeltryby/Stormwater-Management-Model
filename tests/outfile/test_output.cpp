@@ -80,6 +80,7 @@ BOOST_AUTO_TEST_CASE(InitTest) {
     BOOST_CHECK(p_handle != NULL);
 
     SMO_close(p_handle);
+
 }
 
 BOOST_AUTO_TEST_CASE(CloseTest) {
@@ -154,8 +155,7 @@ BOOST_FIXTURE_TEST_CASE(test_getProjectSize, Fixture) {
     std::vector<int> ref;
     ref.assign(ref_array, ref_array + ref_dim);
 
-    BOOST_CHECK_EQUAL_COLLECTIONS(ref.begin(), ref.end(), test.begin(),
-                                  test.end());
+    BOOST_CHECK_EQUAL_COLLECTIONS(ref.begin(), ref.end(), test.begin(), test.end());
 
     SMO_freeMemory((void*)i_array);
 }
@@ -176,8 +176,7 @@ BOOST_FIXTURE_TEST_CASE(test_getUnits, Fixture) {
 	std::vector<int> ref;
     ref.assign(ref_array, ref_array + ref_dim);
 
-    BOOST_CHECK_EQUAL_COLLECTIONS(ref.begin(), ref.end(), test.begin(),
-                                  test.end());
+    BOOST_CHECK_EQUAL_COLLECTIONS(ref.begin(), ref.end(), test.begin(), test.end());
 
     SMO_freeMemory((void*)i_array);
 }

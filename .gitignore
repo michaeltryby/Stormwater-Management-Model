@@ -8,3 +8,11 @@ nrtest*/
 # Eclipse Stuff
 .metadata/
 .settings/
+
+build*/
+extern/boost_*
+nrtests/
+
+*_export.h
+
+test*.*

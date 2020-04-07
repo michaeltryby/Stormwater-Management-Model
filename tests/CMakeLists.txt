@@ -4,26 +4,28 @@
 
 
 #Prep ourselves for compiling with boost
-if(WIN32)
-    set(Boost_USE_STATIC_LIBS       ON)
-else()
-    set(Boost_USE_STATIC_LIBS       OFF)
-    add_definitions(-DBOOST_ALL_DYN_LINK)
-endif()
-
-find_package(Boost COMPONENTS unit_test_framework system thread filesystem)
-include_directories (${Boost_INCLUDE_DIRS})
+include(../extern/boost.cmake)
 
 
 add_subdirectory(outfile)
+add_subdirectory(solver)
 
 
 # Setting up tests to run from build tree
 set(TEST_BIN_DIRECTORY "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>")
 
 
-# ctest doesn't like tests added in subdirectories so adding them here
+###########  ADD TESTS HERE  ###########
 add_test(NAME test_output
     COMMAND "${TEST_BIN_DIRECTORY}/test_output"
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/outfile/data
+    )
+
+add_test(NAME test_solver
+    COMMAND "${TEST_BIN_DIRECTORY}/test_solver"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/solver/data
+    )
+
+add_test(NAME test_datetime
+    COMMAND "${TEST_BIN_DIRECTORY}/test_datetime"
     )

@@ -48,24 +48,24 @@ static int DateFormat;
 
 //=============================================================================
 
-void divMod(int n, int d, int* result, int* remainder)
+void divMod(int n, int d, int *quotient, int *remainder)
 
 //  Input:   n = numerator
 //           d = denominator
-//  Output:  result = integer part of n/d
+//  Output:  quotient = integer part of n/d
 //           remainder = remainder of n/d
 //  Purpose: finds integer part and remainder of n/d.
 
 {
     if (d == 0)
     {
-        *result = 0;
+        *quotient = 0;
         *remainder = 0;
     }
     else
     {
-        *result = n/d;
-        *remainder = n - d*(*result);
+        *quotient  = n / d;
+        *remainder = n % d; //*(*result);
     }
 }
 
@@ -523,9 +523,9 @@ void datetime_getTimeStamp(int fmt, DateTime aDate, int stampSize, char* timeSta
     char dateStr[DATE_STR_SIZE];
     char timeStr[TIME_STR_SIZE];
     int  oldDateFormat = DateFormat;
-    
+
     if ( stampSize < DATE_STR_SIZE + TIME_STR_SIZE + 2 ) return;
-    datetime_setDateFormat(fmt);     
+    datetime_setDateFormat(fmt);
     datetime_dateToStr(aDate, dateStr);
     DateFormat = oldDateFormat;
     datetime_timeToStr(aDate, timeStr);

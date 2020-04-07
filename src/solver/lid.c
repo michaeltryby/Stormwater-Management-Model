@@ -12,6 +12,7 @@
 //             08/01/16   (Build 5.1.011)
 //             03/14/17   (Build 5.1.012)
 //             05/10/18   (Build 5.1.013)
+//             03/01/20   (Build 5.1.014)
 //   Author:   L. Rossman (US EPA)
 //
 //   This module handles all data processing involving LID (Low Impact
@@ -760,7 +761,7 @@ int readDrainData(int j, char* toks[], int ntoks)
     for (i = 0; i < 6; i++) x[i] = 0.0;                                        //(5.1.013)
     for (i = 2; i < 8; i++)                                                    //
     {
-        if ( ntoks > i && ! getDouble(toks[i], &x[i-2])  || x[i-2] < 0.0 )     //(5.1.013)
+        if ( (ntoks > i && !getDouble(toks[i], &x[i-2])) || (x[i-2] < 0.0) )     //(5.1.013)
             return error_setInpError(ERR_NUMBER, toks[i]);
     }
 

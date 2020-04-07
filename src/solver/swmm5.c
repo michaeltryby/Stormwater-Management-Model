@@ -19,7 +19,7 @@
 //
 //   Build 5.1.008:
 //   - Support added for the MinGW compiler.
-//   - Reporting of project options moved to swmm_start. 
+//   - Reporting of project options moved to swmm_start.
 //   - Hot start file now read before routing system opened.
 //   - Final routing step adjusted so that total duration not exceeded.
 //
@@ -38,7 +38,7 @@
 //   Build 5.1.013:
 //   - Support added for saving average results within a reporting period.
 //   - SWMM engine now always compiled to a shared object library.
-//     
+//
 //-----------------------------------------------------------------------------
 #define _CRT_SECURE_NO_DEPRECATE
 
@@ -88,7 +88,7 @@
 #include "datetime.h"                  // date/time functions
 #include "objects.h"                   // definitions of SWMM's data objects
 #include "funcs.h"                     // declaration of all global functions
-#include "text.h"                      // listing of all text strings 
+#include "text.h"                      // listing of all text strings
 #define  EXTERN                        // defined as 'extern' in headers.h
 #include "globals.h"                   // declaration of all global variables
 
@@ -96,10 +96,12 @@
 
 #define  MAX_EXCEPTIONS 100            // max. number of exceptions handled
 
+TSolverState SolverState = CLOSED;
+
 //-----------------------------------------------------------------------------
 //  Unit conversion factors
 //-----------------------------------------------------------------------------
-const double Ucf[10][2] = 
+const double Ucf[10][2] =
       {//  US      SI
       {43200.0,   1097280.0 },         // RAINFALL (in/hr, mm/hr --> ft/sec)
       {12.0,      304.8     },         // RAINDEPTH (in, mm --> ft)
@@ -126,6 +128,7 @@ static int  ExceptionCount;       // number of exceptions handled
 static int  DoRunoff;             // TRUE if runoff is computed
 static int  DoRouting;            // TRUE if flow routing is computed
 
+
 //-----------------------------------------------------------------------------
 //  External API functions (prototyped in swmm5.h)
 //-----------------------------------------------------------------------------
@@ -151,7 +154,7 @@ static int  xfilter(int xc, char* module, double elapsedTime, long step);
 
 //=============================================================================
 
-int DLLEXPORT  swmm_run(char* f1, char* f2, char* f3)
+int DLLEXPORT  swmm_run(const char* f1, const char* f2, const char* f3)
 //
 //  Input:   f1 = name of input file
 //           f2 = name of report file
@@ -168,6 +171,7 @@ int DLLEXPORT  swmm_run(char* f1, char* f2, char* f3)
     IsOpenFlag = FALSE;                                                        //
     IsStartedFlag = FALSE;                                                     //
     SaveResultsFlag = TRUE;                                                    //
+    SolverState = CLOSED;
 
     // --- open the files & read input data
     ErrorCode = 0;
@@ -211,12 +215,13 @@ int DLLEXPORT  swmm_run(char* f1, char* f2, char* f3)
 
     // --- close the system
     swmm_close();
+
     return error_getCode(ErrorCode);
 }
 
 //=============================================================================
 
-int DLLEXPORT swmm_open(char* f1, char* f2, char* f3)
+int DLLEXPORT swmm_open(const char* f1, const char* f2, const char* f3)
 //
 //  Input:   f1 = name of input file
 //           f2 = name of report file
@@ -242,12 +247,14 @@ int DLLEXPORT swmm_open(char* f1, char* f2, char* f3)
         Warnings = 0;
         IsOpenFlag = FALSE;
         IsStartedFlag = FALSE;
+        SolverState = CLOSED;
         ExceptionCount = 0;
 
         // --- open a SWMM project
         project_open(f1, f2, f3);
         if ( ErrorCode ) return error_getCode(ErrorCode);
         IsOpenFlag = TRUE;
+
         report_writeLogo();
         writecon(FMT06);
 
@@ -270,6 +277,8 @@ int DLLEXPORT swmm_open(char* f1, char* f2, char* f3)
         ErrorCode = ERR_SYSTEM;
     }
 #endif
+
+    SolverState = OPENED;
     return error_getCode(ErrorCode);
 }
 
@@ -277,7 +286,7 @@ int DLLEXPORT swmm_open(char* f1, char* f2, char* f3)
 
 int DLLEXPORT swmm_start(int saveResults)
 //
-//  Input:   saveResults = TRUE if simulation results saved to binary file 
+//  Input:   saveResults = TRUE if simulation results saved to binary file
 //  Output:  returns an error code
 //  Purpose: starts a SWMM simulation.
 //
@@ -346,7 +355,7 @@ int DLLEXPORT swmm_start(int saveResults)
         massbal_open();
         stats_open();
 
-        // --- write project options to report file 
+        // --- write project options to report file
 	    report_writeOptions();
         if ( RptFlags.controls ) report_writeControlActionsHeading();
     }
@@ -358,6 +367,8 @@ int DLLEXPORT swmm_start(int saveResults)
         ErrorCode = ERR_SYSTEM;
     }
 #endif
+
+    SolverState = STARTED;
     return error_getCode(ErrorCode);
 }
 //=============================================================================
@@ -431,10 +442,17 @@ int DLLEXPORT swmm_step(double* elapsedTime)
         if ( NewRoutingTime < TotalDuration )
         {
             ElapsedTime = NewRoutingTime / MSECperDAY;
+            SolverState = STEPPING;
+
         }
 
         // --- otherwise end the simulation
-        else ElapsedTime = 0.0;
+        else
+        {
+            ElapsedTime = 0.0;
+            SolverState = COMPLETED;
+        }
+
         *elapsedTime = ElapsedTime;
     }
 
@@ -445,6 +463,7 @@ int DLLEXPORT swmm_step(double* elapsedTime)
         ErrorCode = ERR_SYSTEM;
     }
 #endif
+
     return error_getCode(ErrorCode);
 }
 
@@ -493,7 +512,7 @@ void execRouting()
 
         // --- if no runoff analysis, update climate state (for evaporation)
         else climate_setState(getDateTime(NewRoutingTime));
-  
+
         // --- route flows & pollutants through drainage system
         //     (while updating NewRoutingTime)
         if ( DoRouting ) routing_execute(RouteModel, routingStep);
@@ -549,6 +568,8 @@ int DLLEXPORT swmm_end(void)
         hotstart_close();
         IsStartedFlag = FALSE;
     }
+
+    SolverState = ENDED;
     return error_getCode(ErrorCode);
 }
 
@@ -592,6 +613,8 @@ int DLLEXPORT swmm_close()
     }
     IsOpenFlag = FALSE;
     IsStartedFlag = FALSE;
+
+    SolverState = CLOSED;
     return 0;
 }
 
@@ -706,7 +729,7 @@ char* sstrncpy(char *dest, const char *src, size_t maxlen)
 
 //=============================================================================
 
-int  strcomp(char *s1, char *s2)
+int  strcomp(const char *s1, const char *s2)
 //
 //  Input:   s1 = a character string
 //           s2 = a character string
@@ -809,14 +832,14 @@ DateTime getDateTime(double elapsedMsec)
 
 //=============================================================================
 
-void  writecon(char *s)
+void  writecon(const char *s)
 //
 //  Input:   s = a character string
 //  Output:  none
 //  Purpose: writes string of characters to the console.
 //
 {
-    fprintf(stdout,s);
+    fprintf(stdout, "%s", s);
     fflush(stdout);
 }
 

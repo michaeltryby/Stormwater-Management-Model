@@ -26,7 +26,7 @@
 //
 //   Build 5.1.011:
 //   - Changed WarningCode to Warnings (# warnings issued)
-//   - Added error message text as a variable. 
+//   - Added error message text as a variable.
 //   - Added elapsed simulation time (in decimal days) variable.
 //   - Added variables associated with detailed routing events.
 //
@@ -36,6 +36,10 @@
 //   Build 5.1.013:
 //   - CrownCutoff and RuleStep added as analysis option variables.
 //-----------------------------------------------------------------------------
+
+#ifndef GLOBALS_H
+#define GLOBALS_H
+
 
 EXTERN TFile
                   Finp,                     // Input file
@@ -166,3 +170,6 @@ EXTERN TTable*    Tseries;                  // Array of time series tables
 EXTERN TTransect* Transect;                 // Array of transect data
 EXTERN TShape*    Shape;                    // Array of custom conduit shapes
 EXTERN TEvent*    Event;                    // Array of routing events
+
+
+#endif //GLOBALS_H
