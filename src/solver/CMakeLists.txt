@@ -50,7 +50,8 @@ target_compile_options(swmm5
             "$<$<CONFIG:Release>:/fp:fast>"
             "$<$<CONFIG:Release>:/Zi>"
         ">"
-    )
+        $<$<BOOL:APPLE>:-Wall>
+)
 
 target_link_options(swmm5
     PUBLIC
