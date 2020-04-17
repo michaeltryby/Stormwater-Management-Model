@@ -27,19 +27,20 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 # Sets the position independent code property for all targets
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+
 # Sets default install prefix when cmakecache is initialized for first time
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install CACHE PATH "..." FORCE)
 endif()
 
-
 # Define install locations (will be prepended by install prefix)
-set(TOOL_DIST "bin")
+set(TOOL_DIST    "bin")
 set(INCLUDE_DIST "include")
 set(LIBRARY_DIST "lib")
 set(CONFIG_DIST  "cmake")
 
 
+# Define build options
 option(BUILD_TESTS "Builds component tests (requires Boost)" OFF)
 option(BUILD_DEF   "Builds library with def file interface" OFF)
 
