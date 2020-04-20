@@ -15,4 +15,6 @@ nrtests/
 
 *_export.h
 
-test*.*
+tests/outfile/data/*
+tests/solver/data/*
+!test_*.*

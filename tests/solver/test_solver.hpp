@@ -10,9 +10,9 @@
 #include "swmm5_2.h"
 
 
-#define DATA_PATH_INP "./example3.inp"
-#define DATA_PATH_RPT "./test.rpt"
-#define DATA_PATH_OUT "./test.out"
+#define DATA_PATH_INP "./test_example3.inp"
+#define DATA_PATH_RPT "./example3.rpt"
+#define DATA_PATH_OUT "./example3.out"
 
 
 

@@ -22,7 +22,7 @@
 #include "swmm_output.h"
 
 // NOTE: Reference data for the unit tests is currently tied to SWMM 5.1.7
-#define DATA_PATH "./Example1.out"
+#define DATA_PATH "./test_Example1.out"
 
 using namespace std;
 
