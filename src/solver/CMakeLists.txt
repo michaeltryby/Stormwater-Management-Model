@@ -76,7 +76,7 @@ set_target_properties(swmm5
         MACOSX_RPATH TRUE
         SKIP_BUILD_RPATH FALSE
         BUILD_WITH_INSTALL_RPATH FALSE
-        INSTALL_RPATH "@loader_path"
+        INSTALL_RPATH "@loader_path/../extern"
         INSTALL_RPATH_USE_LINK_PATH TRUE
 )
 
@@ -105,14 +105,37 @@ install(TARGETS swmm5
         DESTINATION "${INCLUDE_DIST}"
 )
 
-install(EXPORT swmm5Targets
-    DESTINATION "${CONFIG_DIST}"
-    FILE swmm5-config.cmake
+install(
+    EXPORT
+        swmm5Targets
+    DESTINATION
+        "${CONFIG_DIST}"
+    FILE
+        swmm5-config.cmake
 )
 
-install(FILES ${SWMM_PUBLIC_HEADERS}
-    DESTINATION "${INCLUDE_DIST}"
+install(
+    FILES
+        ${SWMM_PUBLIC_HEADERS}
+    DESTINATION
+        "${INCLUDE_DIST}"
 )
+
+
+# When building on Linux/MacOS relocate libomp to install package
+if(NOT WIN32)
+    get_filename_component(EXTERN_LIB_PATH ${OpenMP_libomp_LIBRARY} REALPATH)
+
+    install(
+        FILES
+            ${EXTERN_LIB_PATH}
+        DESTINATION
+            ${CMAKE_INSTALL_PREFIX}/extern
+    )
+
+    # Pass the var up the project tree
+    set(EXTERN_LIB_PATH ${EXTERN_LIB_PATH} PARENT_SCOPE)
+endif()
 
 
 # copy swmm5 to build tree for testing
