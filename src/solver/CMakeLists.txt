@@ -124,6 +124,7 @@ install(
 
 # When building on Linux/MacOS relocate libomp to install package
 if(NOT WIN32)
+    message(status "OpenMP_libomp_LIBRARY: ${OpenMP_libomp_LIBRARY}")
     get_filename_component(EXTERN_LIB_PATH ${OpenMP_libomp_LIBRARY} REALPATH)
 
     install(
