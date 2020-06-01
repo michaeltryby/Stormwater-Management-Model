@@ -33,12 +33,19 @@ set "PLATFORM=win32"
 set "CUR_DIR=%CD%"
 set "SCRIPT_HOME=%~dp0"
 cd %SCRIPT_HOME%
-cd ..
+pushd ..
+pushd ..
+set "PROJ_DIR=%CD%"
+popd
 
 :: check for requirements
 where cmake > nul
 if %ERRORLEVEL% NEQ 0 ( echo "ERROR: cmake not installed" & exit /B 1 )
 
+
+:: determine project
+for %%i in (%PROJ_DIR%) do set PROJECT=%~ni
+echo %PROJECT%
 
 setlocal EnableDelayedExpansion
 
