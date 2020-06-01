@@ -44,7 +44,7 @@ if %ERRORLEVEL% NEQ 0 ( echo "ERROR: cmake not installed" & exit /B 1 )
 
 
 :: determine project
-for %%i in (%PROJ_DIR%) do set PROJECT=%~ni
+for %%i in (%PROJ_DIR%) do set PROJECT=%%~ni
 echo %PROJECT%
 
 setlocal EnableDelayedExpansion
