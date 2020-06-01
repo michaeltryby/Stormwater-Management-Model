@@ -45,6 +45,7 @@ if %ERRORLEVEL% NEQ 0 ( echo "ERROR: cmake not installed" & exit /B 1 )
 :: determine project
 for %%i in (%PROJ_DIR%) do set PROJECT=%%~ni
 set PROJECT=%PROJECT:~0,-8%
+if not defined PROJECT ( echo "ERROR: PROJECT could not be determined" & exit /B 1 )
 
 :: GitHub Actions
 echo ::set-env name=PROJECT::%PROJECT%

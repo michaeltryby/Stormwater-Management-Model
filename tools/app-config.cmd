@@ -31,7 +31,7 @@ if %ERRORLEVEL% NEQ 0 ( echo "ERROR: git not installed" & exit /B 1 )
 if not defined PROJECT ( echo "ERROR: PROJECT must be defined" & exit /B 1 )
 
 
-:: swmm target created by the cmake build script
+:: CLE target created by the cmake build script
 set TEST_CMD=run%PROJECT%.exe
 
 :: remove quotes from path and convert backward to forward slash

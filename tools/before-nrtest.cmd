@@ -47,7 +47,7 @@ for %%d in (curl 7z) do (
 
 
 :: set URL to github repo with test files
-set "NRTESTS_URL=https://github.com/SWMM-Project/%PROJECT%-nrtestsuite"
+set "NRTESTS_URL=https://github.com/%PROJECT%-Project/%PROJECT%-nrtestsuite"
 
 
 :: if release tag isn't provided latest tag will be retrieved
