@@ -24,7 +24,6 @@
 
 
 :: set global defaults
-set "PROJECT=swmm"
 set "BUILD_HOME=build"
 set "PLATFORM=win32"
 
@@ -45,7 +44,11 @@ if %ERRORLEVEL% NEQ 0 ( echo "ERROR: cmake not installed" & exit /B 1 )
 
 :: determine project
 for %%i in (%PROJ_DIR%) do set PROJECT=%%~ni
-echo %PROJECT%
+set PROJECT=%PROJECT:~0,-8%
+
+:: GitHub Actions
+echo ::set-env name=PROJECT::%PROJECT%
+
 
 setlocal EnableDelayedExpansion
 
