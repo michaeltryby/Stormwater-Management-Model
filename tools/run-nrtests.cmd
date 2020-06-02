@@ -18,8 +18,7 @@
 ::    REF_BUILD_ID
 ::
 ::  Arguments:
-::    1 - (SUT_VERSION)  - optional argument
-::    2 - (SUT_BUILD_ID) - optional argument
+::    1 - (SUT_BUILD_ID) - optional argument
 ::
 
 ::@echo off
@@ -48,18 +47,15 @@ popd
 cd %PROJ_DIR%\%TEST_HOME%
 
 :: Process optional arguments
-if [%1]==[] (set "SUT_VERSION=unknown"
-) else ( set "SUT_VERSION=%~1" )
-
-if [%2]==[] ( set "SUT_BUILD_ID=local"
-) else ( set "SUT_BUILD_ID=%~2" )
+if [%1]==[] ( set "SUT_BUILD_ID=local"
+) else ( set "SUT_BUILD_ID=%~1" )
 
 
 :: check if app config file exists
 if not exist apps\%PROJECT%-%SUT_BUILD_ID%.json (
   mkdir apps
   call %SCRIPT_HOME%\app-config.cmd %PROJ_DIR%\%BUILD_HOME%\bin\Release^
-    %PLATFORM% %SUT_BUILD_ID% %SUT_VERSION% > apps\%PROJECT%-%SUT_BUILD_ID%.json
+    %PLATFORM% %SUT_BUILD_ID% > apps\%PROJECT%-%SUT_BUILD_ID%.json
 )
 
 :: prepare for artifact upload
