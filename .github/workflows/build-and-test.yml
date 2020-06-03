@@ -51,7 +51,7 @@ jobs:
       run: tools/before-nrtest.cmd
 
     - name: Run reg test
-      run: tools/run-nrtests.cmd %GITHUB_SHA% %GITHUB_RUN_ID%_%GITHUB_RUN_NUMBER%
+      run: tools/run-nrtests.cmd %GITHUB_RUN_ID%_%GITHUB_RUN_NUMBER%
 
     - name: Upload artifacts
       if: ${{ always() }}

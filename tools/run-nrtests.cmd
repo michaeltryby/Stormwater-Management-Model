@@ -2,7 +2,7 @@
 ::  run_nrtest.cmd - Runs numerical regression test
 ::
 ::  Created: Oct 16, 2019
-::  Updated: May 29, 2020
+::  Updated: Jun 2, 2020
 ::
 ::  Author: Michael E. Tryby
 ::          US EPA - ORD/CESER

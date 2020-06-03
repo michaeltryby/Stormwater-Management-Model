@@ -20,7 +20,7 @@
 ::    1 - (RELEASE_TAG) release tag for benchmark version (defaults to latest tag)
 ::
 ::  Note:
-::    Tests and benchmark files are stored in the project-nrtests repo.
+::    Tests and benchmark files are stored in the "%PROJECT%-nrtestsuite" repo.
 ::    This script retrieves them using a stable URL associated with a GitHub
 ::    release, stages the files, and sets up the environment for nrtest to run.
 ::
@@ -41,8 +41,8 @@ setlocal
 
 :: check that dependencies are installed
 for %%d in (curl 7z) do (
-    where %%d > nul
-    if %ERRORLEVEL% neq 0 ( echo "ERROR: %%d not installed" & exit /B 1 )
+  where %%d > nul
+  if %ERRORLEVEL% neq 0 ( echo "ERROR: %%d not installed" & exit /B 1 )
 )
 
 
@@ -73,7 +73,9 @@ if [%RELEASE_TAG%] == [] (
 if defined RELEASE_TAG (
   set "TESTFILES_URL=%NRTESTS_URL%/archive/%RELEASE_TAG%.zip"
   set "BENCHFILES_URL=%NRTESTS_URL%/releases/download/%RELEASE_TAG%/benchmark-%PLATFORM%.zip"
-) else ( echo ERROR: tag %RELEASE_TAG% is invalid & exit /B 1 )
+) else (
+  echo ERROR: tag %RELEASE_TAG% is invalid & exit /B 1
+)
 
 
 :: create a clean directory for staging regression tests
